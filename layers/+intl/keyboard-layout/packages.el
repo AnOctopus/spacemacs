@@ -43,7 +43,9 @@
     :bepo
     (setq aw-keys '(?a ?u ?i ?e ?t ?s ?r ?n))
     :dvorak
-    (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s))))
+    (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s))
+    :colemak
+    (setq aw-keys '(?a ?r ?s ?t ?h ?n ?e ?i ?o))))
 
 (defun keyboard-layout/pre-init-avy ()
   (kl|config avy
@@ -54,7 +56,9 @@
     :bepo
     (setq-default avy-keys '(?a ?u ?i ?e ?t ?s ?r ?n))
     :dvorak
-    (setq-default avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s))))
+    (setq-default avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s))
+    :colemak
+    (setq-default avy-keys '(?a ?r ?s ?t ?h ?n ?e ?i ?o))))
 
 (defun keyboard-layout/pre-init-comint ()
   (kl|config comint-mode
@@ -257,7 +261,14 @@
       (kl/set-in-state helm-find-files-map "C-k" 'helm-ff-run-grep)
       (kl/set-in-state helm-find-files-map "C-r" 'helm-maybe-exit-minibuffer)
       (kl/set-in-state helm-read-file-map "C-s" 'helm-previous-line)
-      (kl/set-in-state helm-read-file-map "C-K" 'helm-previous-line)))
+      (kl/set-in-state helm-read-file-map "C-K" 'helm-previous-line))
+    :colemak
+    (progn
+      ;; HACK: Forced to correct wrong behaviour
+      (kl/set-in-state helm-find-files-map "C-n" 'helm-previous-line)
+      (kl/set-in-state helm-find-files-map "C-e" 'helm-next-line)
+      (kl/set-in-state helm-read-file-map "C-n" 'helm-previous-line)
+      (kl/set-in-state helm-read-file-map "C-e" 'helm-next-line)))
 
   (kl|config helm-locate
     :description

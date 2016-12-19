@@ -13,7 +13,7 @@
 ;; PUBLIC VARIABLES
 ;;------------------------------------------------------------------------------
 
-(defvar kl-layout 'dvorak
+(defvar kl-layout 'colemak
   "The keyboard-layout to use. Possible values are `dvorak' and `bepo'.")
 
 (defvar kl-enabled-configurations nil
@@ -49,7 +49,14 @@ any case.")
                ("h" . "h")
                ("j" . "t")
                ("k" . "n")
-               ("l" . "s"))))
+               ("l" . "s")))
+    (colemak . (("j" . "n")
+                ("n" . "k")
+                ("k" . "e")
+                ("e" . "j")
+                ;;
+                ("i" . "l")
+                ("l" . "i"))))
   "The base rebinding map. Dots should be read as `will behave
   as'. It should be a bidirectional mapping, i.e. all present
   keys should be once in each column.")
