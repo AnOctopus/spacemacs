@@ -13,7 +13,7 @@
 ;; PUBLIC VARIABLES
 ;;------------------------------------------------------------------------------
 
-(defvar kl-layout 'dvorak
+(defvar kl-layout 'colemak-hnei
   "The keyboard-layout to use. Possible values are `bepo', `dvp',
 `dvorak', `workman', `neo', `colemak-neio', `colemak-hnei' and
 `colemak-jkhl'.")
