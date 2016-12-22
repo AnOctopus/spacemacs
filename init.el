@@ -25,6 +25,7 @@
              emacs-version spacemacs-emacs-min-version)
   (load-file (concat (file-name-directory load-file-name)
                      "core/core-load-paths.el"))
+  (setq dotspacemacs-filepath "~/.emacs.d/.spacemacs")
   (require 'core-spacemacs)
   (spacemacs/init)
   (spacemacs/maybe-install-dotfile)
