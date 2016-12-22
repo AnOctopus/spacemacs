@@ -31,36 +31,37 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     erc
-     slack
-     react
-     clojure
-     haskell
-     groovy
-     latex
-     nlinum
-     yaml
-     markdown
+     (keyboard-layout :variables kl-layout 'colemak)
+     (verson-control :variables version-control-diff-tool 'git-gutter)
+     ansible
      auto-completion
-     emacs-lisp
-     git
-     markdown
-     org
-     scala
-     spell-checking
-     syntax-checking
      chrome
+     clojure
+     colors
      command-log
      docker
-     fasd
-     restclient
-     puppet
-     shell
      elfeed
-     colors
-     ansible
-     (verson-control :variables version-control-diff-tool 'git-gutter)
-     (keyboard-layout :variables kl-layout 'colemak))
+     emacs-lisp
+     erc
+     fasd
+     git
+     groovy
+     haskell
+     latex
+     markdown
+     markdown
+     nlinum
+     org
+     puppet
+     react
+     restclient
+     scala
+     shell
+     slack
+     spell-checking
+     syntax-checking
+     yaml
+     )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
