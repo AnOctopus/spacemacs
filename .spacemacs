@@ -140,8 +140,11 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(darktooth
-                         spacemacs-dark)
+   dotspacemacs-themes
+   '(
+     darktooth
+     spacemacs-dark
+     )
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
@@ -316,22 +319,18 @@ you should place your code here."
   (setq
    elfeed-db-directory "~/Sync/.elfeed"
    rmh-elfeed-org-files (list "~/Sync/elfeed.org")
+   custom-file "~/.emacs.d/custom.el"
+   evil-want-Y-yank-to-eol nil
    )
-  (define-key evil-lisp-state-map "n" 'sp-up-sexp)
-  (define-key evil-lisp-state-map "e" 'sp-down-sexp)
+  ;; (load-file custom-file :noerror)
+  (define-key evil-lisp-state-map "n" (evil-lisp-state-enter-command sp-up-sexp))
+
+  ;; (define-key evil-lisp-state-map "e" 'sp-down-sexp)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(evil-want-Y-yank-to-eol nil)
- '(package-selected-packages
-   (quote
-    (git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter diff-hl keyfreq groovy-mode gradle-mode jinja2-mode ansible-doc ansible rainbow-mode rainbow-identifiers color-identifiers-mode xterm-color web-mode web-beautify tagedit smex slim-mode slack emojify circe oauth2 websocket ht shell-pop scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe restclient rbenv rake puppet-mode pug-mode ob-http nlinum-relative nlinum multi-term minitest livid-mode skewer-mode less-css-mode js2-refactor js2-mode js-doc intero hlint-refactor hindent helm-hoogle helm-css-scss haskell-snippets haml-mode gmail-message-mode ham-mode html-to-markdown flycheck-haskell fasd grizzl eshell-z eshell-prompt-extras esh-help erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks emmet-mode elfeed-web simple-httpd elfeed-org elfeed-goodies ace-jump-mode elfeed edit-server dockerfile-mode docker json-mode tablist docker-tramp json-snatcher json-reformat company-web web-completion-data company-tern dash-functional tern company-ghci company-ghc ghc haskell-mode company-cabal company-auctex command-log-mode coffee-mode cmm-mode clojure-snippets clj-refactor inflections edn multiple-cursors paredit peg cider-eval-sexp-fu cider seq queue clojure-mode chruby bundler inf-ruby auctex yaml-mode smeargle orgit org-projectile org-present org org-pomodoro alert log4e gntp org-download magit-gitflow htmlize helm-gitignore helm-company helm-c-yasnippet gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit magit-popup git-commit with-editor company-statistics company auto-yasnippet yasnippet auto-dictionary ac-ispell auto-complete mmm-mode markdown-toc markdown-mode gh-md ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide ido-vertical-mode hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed dash aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async quelpa package-build spacemacs-theme))))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
