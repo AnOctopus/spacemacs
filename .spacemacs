@@ -317,10 +317,11 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   (setq
-   elfeed-db-directory "~/Sync/.elfeed"
-   rmh-elfeed-org-files (list "~/Sync/elfeed.org")
    custom-file "~/.emacs.d/custom.el"
    evil-want-Y-yank-to-eol nil
+   elfeed-db-directory "~/sync/.elfeed"
+   rmh-elfeed-org-files (list "~/sync/elfeed.org")
+   ;; org-agenda-files '("~/sync/org")
    )
   ;; (load-file custom-file :noerror)
   (define-key evil-lisp-state-map "n" (evil-lisp-state-enter-command sp-up-sexp))
