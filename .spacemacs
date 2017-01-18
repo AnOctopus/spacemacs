@@ -40,7 +40,10 @@ values."
      colors
      command-log
      docker
-     elfeed
+     (elfeed :variables
+             rmh-elfeed-org-files '("~/.emacs.d/elfeed.org")
+             elfeed-db-directory "~/sync/.elfeed"
+             elfeed-sort-order 'ascending)
      emacs-lisp
      erc
      fasd
@@ -50,7 +53,8 @@ values."
      latex
      markdown
      nlinum
-     org
+     (org :variables
+          org-agenda-files '("~/sync/org"))
      puppet
      react
      restclient
@@ -150,7 +154,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 14
+                               :size 16
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -316,12 +320,11 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-  (setq
+  (setq-default
    custom-file "~/.emacs.d/custom.el"
    evil-want-Y-yank-to-eol nil
-   elfeed-db-directory "~/sync/.elfeed"
-   rmh-elfeed-org-files (list "~/sync/elfeed.org")
-   ;; org-agenda-files '("~/sync/org")
+   evil-move-cursor-back nil
+   truncate-lines t
    )
   ;; (load-file custom-file :noerror)
   (define-key evil-lisp-state-map "n" (evil-lisp-state-enter-command sp-up-sexp))
