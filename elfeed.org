@@ -1,0 +1,153 @@
+* Blogs :elfeed:
+** Software Engineering and Computer Science :programming:
+*** Agile :agile:
+**** http://feeds2.feedburner.com/IndustrialBlogic
+*** Emacs :emacs:
+*** Lisp :lisp:
+**** http://www.pvk.ca/atom.xml
+**** http://eli.thegreenplace.net/feeds/all.atom.xml
+*** Operations and System Administration :ops:
+**** http://patrobinson.github.io/feed.xml
+**** http://techblog.netflix.com/rss.xml
+
+*** http://mrale.ph/atom.xml
+*** https://brooker.co.za/blog/atom.xml
+*** https://www.snellman.net/blog/rss-index.xml
+*** http://blog.regehr.org/feed
+*** http://evanjones.ca/index.rss
+
+*** http://akaptur.com/atom.xml
+*** http://blog.davidron.com/feeds/posts/default
+*** http://gigasquidsoftware.com/atom.xml
+*** http://rachelbythebay.com/w/atom.xml
+*** http://nullprogram.com/feed/
+*** http://planet.haskell.org/rss20.xml
+*** http://www.spacjer.com/feed.xml
+*** http://www.yosefk.com/blog/feed
+*** http://conscientiousprogrammer.com/atom.xml
+*** http://www.clojure.net/atom.xml
+*** https://noamlewis.wordpress.com/feed/
+*** http://jvns.ca/atom.xml
+*** http://byorgey.wordpress.com/feed/
+*** http://aphyr.com/posts.atom
+*** http://kristerw.blogspot.com/feeds/posts/default
+*** http://tailoredshapes.com/feed.xml
+*** http://www.musicforprogramming.net/rss.php
+*** http://feeds.feedburner.com/jayfields/mjKQ
+*** http://typeinference.com/feed
+*** http://swannodette.github.io/atom.xml
+*** http://feeds.feedburner.com/cognicast
+*** http://neverworkintheory.org/feed
+*** http://feeds.feedburner.com/ArcaneSentiment
+*** http://feeds.feedburner.com/KrisJenkinsBlog
+*** http://tratt.net/laurie/blog/entries.rss
+*** http://pchiusano.github.io/feed.xml
+*** http://www.bytopia.org/rss-feed
+*** http://feeds.codecommit.com/codecommit
+*** http://feeds.feedburner.com/FlyingMachineStudios
+*** http://blog.jessitron.com/feeds/posts/default
+*** http://deliberate-software.com/atom.xml
+*** http://camdez.com/blog/atom.xml
+*** http://funcall.blogspot.com/feeds/posts/default
+*** http://www.lispcast.com/feed
+*** http://blog.fogus.me/feed/
+*** http://hypirion.com/rss/all
+*** http://pointersgonewild.com/feed/
+*** http://blog.metaobject.com/feeds/posts/default
+*** http://danluu.com/atom.xml
+*** http://luxlang.blogspot.com/feeds/posts/default
+*** http://blog.8arrow.org/feed
+*** http://devblog.avdi.org/feed/
+*** https://xivilization.net/~marek/blog/atom.xml
+*** http://journal.stuffwithstuff.com/rss.xml
+*** http://pragmaticemacs.com/feed/
+*** http://endlessparentheses.com/atom.xml
+*** http://emacshorrors.com/feed.atom
+*** http://feeds.feedburner.com/codinghorror/
+*** http://lambda-the-ultimate.org/rss.xml
+*** http://p-cos.blogspot.com/feeds/posts/default
+*** http://planet.lisp.org/rss20.xml
+*** http://irreal.org/blog/?feed=rss2
+*** http://carcaddar.blogspot.com/feeds/posts/default
+*** http://blog.nullspace.io/feed.xml
+*** https://zachholman.com/atom.xml
+*** http://wozniak.ca/posts.atom
+*** http://blog.goodstuff.im/rss.xml
+*** http://www.cliffc.org/blog/feed/
+*** https://codeascraft.com/feed/atom/
+** Anime :anime:
+*** http://www.someanithing.com/feed
+*** http://yuri-ism.com/feed/
+** Rationality :rationality:
+*** https://thezvi.wordpress.com/feed/
+*** http://acritch.com/feed/
+*** http://mindingourway.com/rss/
+*** http://lesswrong.com/.rss
+*** http://meteuphoric.wordpress.com/feed/
+*** http://www.overcomingbias.com/feed
+*** http://slatestarcodex.com/feed/
+*** http://mathlesstraveled.com/feed/
+*** http://putanumonit.com/feed/
+*** https://thingofthings.wordpress.com/feed/
+** Math :math:
+*** http://scottaaronson.com/blog/?feed=rss2
+*** http://jeremykun.com/feed/
+*** http://pentadecathlon.com/lifeNews/atom.xml
+*** http://terrytao.wordpress.com/feed/
+*** http://qntm.org/rss.php
+** Science :science:
+*** http://fivethirtyeight.com/science/feed/
+*** http://what-if.xkcd.com/feed.atom
+*** http://www.badscience.net/feed/
+*** http://www.martyklein.com/category/blog/feed/
+*** http://www.annalspornographie.com/feed/
+** Webcomics :webcomic:
+*** https://www.erfworld.com/erf_stream/view?view=rss
+*** https://twigserial.wordpress.com/feed/
+*** http://abstrusegoose.com/feed
+*** http://rsspect.com/rss/qwantz.xml
+*** http://feeds.feedburner.com/rsspect/fJur
+*** http://www.rsspect.com/rss/gunner.xml
+*** http://www.mspaintadventures.com/rss/rss.xml
+*** http://egscomics.com/rss.php
+*** http://nedroid.com/feed/
+*** http://www.rsspect.com/rss/pfsc.xml
+*** http://powernapcomic.com/rss.xml
+*** http://www.smbc-comics.com/rss.php
+*** http://feeds.feedburner.com/SchlockRSS
+*** http://feeds.feedburner.com/sluggy_freelance
+*** http://drmcninja.com/feed
+*** http://pbfcomics.com/feed/feed.xml
+*** http://xkcd.com/atom.xml
+*** http://oglaf.com/feeds/rss/
+*** http://www.sagaofsoul.com/rss.xml
+*** http://hpmor.com/rss.xml
+*** http://unsongbook.com/?feed=rss2
+*** http://wildbow.wordpress.com/feed/
+** Drawing :drawing:
+*** http://gunpowderchant.com/feed/
+*** https://twrlare.wordpress.com/feed/
+** Games :gaming:
+*** http://www.sirlin.net/?format=rss
+*** http://speeddemosarchive.com/sda100.atom :speedruns:
+*** http://tasvideos.org/publications.rss :tas:
+*** http://www.bay12games.com/dwarves/dev_now.rss :dwarf_fortress:
+*** http://www.dotabuff.com/blog.rss :dota:
+*** Eve Online :eve:
+**** https://newsfeed.eveonline.com/en-US/44/articles/page/1/20
+**** https://newsfeed.eveonline.com/en-US/2/articles/page/1/20
+** Health :health:
+*** http://www.bodyrecomposition.com/feed/rss
+*** http://feeds.feedburner.com/thehealthyskeptic
+*** http://healthcorrelator.blogspot.com/feeds/posts/default
+** Economics and Politics :econ:
+*** http://fivethirtyeight.com/economics/feed/
+*** http://daviddfriedman.blogspot.fr/atom.xml
+*** http://urbankchoze.blogspot.com/feeds/posts/default
+*** http://noahpinionblog.blogspot.com/feeds/posts/default
+*** http://feeds.feedburner.com/Themoneyillusion
+*** http://feeds.feedburner.com/marginalrevolution/feed
+** Japan :japan:
+*** http://www.tofugu.com/feed.xml
+** Misc
+*** http://waitbutwhy.com/feed
