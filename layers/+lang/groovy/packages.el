@@ -23,6 +23,7 @@
 (defun groovy/init-groovy-mode ()
   (use-package groovy-mode
     :defer t
+    :mode "Jenkinsfile\\'"
     :config
     (progn
       (add-hook 'groovy-mode-hook 'gradle-mode)
