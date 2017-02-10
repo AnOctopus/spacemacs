@@ -31,8 +31,6 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     (keyboard-layout :variables kl-layout 'colemak)
-     (version-control :variables version-control-diff-tool 'git-gutter)
      ansible
      auto-completion
      chrome
@@ -46,9 +44,14 @@ values."
              elfeed-sort-order 'ascending)
      emacs-lisp
      erc
+     evil-cleverparens
+     (evil-snipe :variables
+                 evil-snipe-enable-alternate-f-and-t-behaviors t)
      fasd
      git
      groovy
+     (keyboard-layout :variables
+                      kl-layout 'colemak)
      haskell
      latex
      markdown
@@ -63,6 +66,7 @@ values."
      slack
      spell-checking
      syntax-checking
+     (version-control :variables version-control-diff-tool 'git-gutter)
      yaml
      )
    ;; List of additional packages that will be installed without being
@@ -159,7 +163,7 @@ values."
                                :size 16
                                :weight normal
                                :width normal
-                               :powerline-scale 1.1)
+                               :powerline-scale 1.3)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The key used for Emacs commands (M-x) (after pressing on the leader key).
@@ -228,7 +232,7 @@ values."
    dotspacemacs-helm-use-fuzzy 'always
    ;; If non nil the paste micro-state is enabled. When enabled pressing `p`
    ;; several times cycle between the kill ring content. (default nil)
-   dotspacemacs-enable-paste-transient-state nil
+   dotspacemacs-enable-paste-transient-state t
    ;; Which-key delay in seconds. The which-key buffer is the popup listing
    ;; the commands bound to the current keystroke sequence. (default 0.4)
    dotspacemacs-which-key-delay 0.4
@@ -304,7 +308,10 @@ values."
    ;; delete only whitespace for changed lines or `nil' to disable cleanup.
    ;; (default nil)
    dotspacemacs-whitespace-cleanup 'changed
-   ))
+   )
+  (add-to-list 'configuration-layer--elpa-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
+  (add-to-list 'package-pinned-packages '(ensime . "melpa-stable") t)
+  )
 
 (defun dotspacemacs/user-init ()
   "Initialization function for user code.
@@ -324,23 +331,12 @@ explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   (setq-default
    custom-file "~/.emacs.d/custom.el"
-   evil-want-Y-yank-to-eol nil
+   evil-want-Y-yank-to-eol t
    evil-move-cursor-back nil
    truncate-lines t
    nxml-child-indent 4
+   nxml-slash-auto-complete-flag t
    )
-  ;; (load-file custom-file :noerror)
-  (define-key evil-lisp-state-map "n" (evil-lisp-state-enter-command sp-up-sexp))
-
-  ;; (define-key evil-lisp-state-map "e" 'sp-down-sexp)
+  (load-file custom-file :noerror)
+  ;; (spacemacs/toggle-evil-cleverparens-on)
   )
-
-;; Do not write anything past this comment. This is where Emacs will
-;; auto-generate custom variable definitions.
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(font-lock-comment-face ((t (:foreground "deep sky blue")))))
