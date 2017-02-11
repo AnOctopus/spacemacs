@@ -265,10 +265,10 @@
     :colemak
     (progn
       ;; HACK: Forced to correct wrong behaviour
-      (kl/set-in-state helm-find-files-map "C-n" 'helm-previous-line)
-      (kl/set-in-state helm-find-files-map "C-e" 'helm-next-line)
-      (kl/set-in-state helm-read-file-map "C-n" 'helm-previous-line)
-      (kl/set-in-state helm-read-file-map "C-e" 'helm-next-line)))
+      (kl/set-in-state helm-find-files-map "C-e" 'helm-previous-line)
+      (kl/set-in-state helm-find-files-map "C-n" 'helm-next-line)
+      (kl/set-in-state helm-read-file-map "C-e" 'helm-previous-line)
+      (kl/set-in-state helm-read-file-map "C-n" 'helm-next-line)))
 
   (kl|config helm-locate
     :description
@@ -477,7 +477,7 @@
       "k"
       "l")))
 
-(defun kl/pre-init-twittering-mode ()
+(defun keyboard-layout/pre-init-twittering-mode ()
   (kl|config twittering-mode
     :description
     "Remap navigation keys in `twittering-mode'."
