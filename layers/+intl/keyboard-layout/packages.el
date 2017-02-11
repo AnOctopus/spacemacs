@@ -299,11 +299,13 @@
     (progn
       (kl/set-in-state helm-find-files-map "C-r" 'helm-previous-line)
       (kl/set-in-state helm-find-files-map "C-s" 'helm-next-line))
-    :colemak-jkhl
+    :colemak-hnei
     (progn
       ;; HACK: Forced to correct wrong behaviour
-      (kl/set-in-state helm-find-files-map "C-h" 'helm-previous-line)
-      (kl/set-in-state helm-find-files-map "C-j" 'helm-find-files-up-one-level)))
+      (kl/set-in-state helm-find-files-map "C-e" 'helm-previous-line)
+      (kl/set-in-state helm-find-files-map "C-n" 'helm-next-line)
+      (kl/set-in-state helm-read-file-map "C-e" 'helm-previous-line)
+      (kl/set-in-state helm-read-file-map "C-n" 'helm-next-line)))
 
   (kl|config helm-locate
     :description
