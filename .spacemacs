@@ -330,13 +330,21 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   (setq-default
-   custom-file "~/.emacs.d/custom.el"
    evil-want-Y-yank-to-eol t
    evil-move-cursor-back nil
    truncate-lines t
    nxml-child-indent 4
    nxml-slash-auto-complete-flag t
    )
-  (load-file custom-file :noerror)
+  (setq
+   custom-file "~/.emacs.d/custom.el"
+   )
+  ;; (load-file custom-file)
   ;; (spacemacs/toggle-evil-cleverparens-on)
   )
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(font-lock-comment-face ((t (:foreground "deep sky blue")))))
