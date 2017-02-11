@@ -99,6 +99,28 @@
         "S" 'edebug-next-mode)
       (advice-add 'edebug-mode :after 'spacemacs//edebug-mode))))
 
+(defun emacs-lisp/init-debug ()
+  (use-package debug
+    :defer t
+    :init (dolist (mode '(emacs-lisp-mode lisp-interaction-mode))
+            (spacemacs/declare-prefix-for-mode mode "md" "debug")
+            (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode
+              "dt" 'spacemacs/elisp-toggle-debug-expr-and-eval-func))
+    :config (evilified-state-evilify-map debugger-mode-map
+              :mode debugger-mode)))
+
+(defun emacs-lisp/init-edebug ()
+  (use-package edebug
+    :defer t
+    :init
+    (progn
+      (dolist (mode '(emacs-lisp-mode lisp-interaction-mode))
+        (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode
+          "df" 'spacemacs/edebug-instrument-defun-on
+          "dF" 'spacemacs/edebug-instrument-defun-off))
+      ;; assure that edebug key bindings are effective
+      (add-hook 'edebug-mode-hook 'spacemacs//edebug-hook t))))
+
 (defun emacs-lisp/post-init-eldoc ()
   (add-hook 'emacs-lisp-mode-hook 'eldoc-mode))
 
