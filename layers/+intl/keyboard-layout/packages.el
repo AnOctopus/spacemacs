@@ -17,6 +17,7 @@
     company
     elfeed
     evil
+    ;; evil-cleverparens
     evil-escape
     evil-evilified-state
     evil-surround
@@ -28,6 +29,7 @@
     magit
     mu4e
     neotree
+    notmuch
     org
     org-agenda
     ranger
@@ -167,6 +169,16 @@
         "wé" 'other-window
         "wq" 'delete-window)
       (kl/leader-alias-of "é" "w"))))
+
+;; (defun keyboard-layout/pre-init-evil-cleverparens ()
+;;   (kl|config evil-cleverparens
+;;     :description
+;;     "Remap `evil-cleverparens' bindings."
+;;     :loader
+;;     (spacemacs|use-package-add-hook evil-cleverparens :post-init BODY)
+;;     :colemak
+;;     (kl/set-in-states '(normal visual)
+;;        )))
 
 (defun keyboard-layout/pre-init-evil-escape ()
   (kl|config evil-escape
@@ -395,6 +407,29 @@
     (kl/set-in-state (evil-get-auxiliary-keymap neotree-mode-map 'evilified)
                      "h" 'neotree-hidden-file-toggle
                      "k" 'neotree-rename-node)))
+
+(defun keyboard-layout/pre-init-notmuch ()
+  (kl|config notmuch
+    :descripition
+    "Remap keys in `notmuch'"
+    :loader
+    (spacemacs|use-package-add-hook notmuch :post-config BODY)
+    ;; :common
+    ;; (dolist (map (list ;; notmuch-common-keymap
+    ;;                    notmuch-hello-mode-map
+    ;;                    ))
+    ;;   (kl/evil-correct-keys 'normal map
+    ;;     "h"
+    ;;     "j"
+    ;;     "k"
+    ;;     "l"))
+    :colemak
+    (kl/evil-correct-keys 'evilified notmuch-common-keymap
+      "h"
+      "j"
+      "k"
+      "l")
+    ))
 
 (defun keyboard-layout/pre-init-org ()
   (kl|config org

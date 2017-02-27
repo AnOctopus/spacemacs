@@ -31,6 +31,8 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     (keyboard-layout :variables
+                      kl-layout 'colemak)
      ansible
      auto-completion
      chrome
@@ -41,7 +43,8 @@ values."
      (elfeed :variables
              rmh-elfeed-org-files '("~/.emacs.d/elfeed.org")
              elfeed-db-directory "~/sync/.elfeed"
-             elfeed-sort-order 'ascending)
+             elfeed-sort-order 'ascending
+             elfeed-goodies/entry-pane-position 'bottom)
      emacs-lisp
      erc
      evil-cleverparens
@@ -50,21 +53,24 @@ values."
      fasd
      git
      groovy
-     (keyboard-layout :variables
-                      kl-layout 'colemak)
      haskell
      latex
      markdown
      nlinum
+     notmuch
      (org :variables
-          org-agenda-files '("~/sync/org"))
+          org-agenda-files '("~/sync/org")
+          org-refile-allow-creating-parent-nodes 'confirm)
+     php
      puppet
      react
      restclient
-     scala
+     (scala :variables
+            scala-enable-eldoc t)
      shell
      slack
      spell-checking
+     sql
      syntax-checking
      (version-control :variables version-control-diff-tool 'git-gutter)
      yaml
@@ -332,15 +338,17 @@ you should place your code here."
   (setq-default
    evil-want-Y-yank-to-eol t
    evil-move-cursor-back nil
-   truncate-lines t
+   ;; truncate-lines t
    nxml-child-indent 4
    nxml-slash-auto-complete-flag t
    )
   (setq
    custom-file "~/.emacs.d/custom.el"
+   spacemacs-useful-buffers-regexp '("\\*\\(scratch\\|spacemacs\\|notmuch.*\\)\\*")
    )
-  ;; (load-file custom-file)
+  (load-file custom-file)
   ;; (spacemacs/toggle-evil-cleverparens-on)
+  (define-key evil-normal-state-map (kbd "SPC #") #'server-edit)
   )
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -348,3 +356,11 @@ you should place your code here."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(font-lock-comment-face ((t (:foreground "deep sky blue")))))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (circe org request tablist docker-tramp cider clojure-mode packed auto-complete auctex elfeed iedit smartparens highlight evil flycheck flyspell-correct haskell-mode company helm helm-core yasnippet multiple-cursors avy skewer-mode js2-mode simple-httpd magit magit-popup git-commit with-editor async alert projectile hydra inf-ruby haml-mode dash sbt-mode scala-mode notmuch yaml-mode xterm-color ws-butler window-numbering which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit sql-indent spacemacs-theme spaceline smeargle slim-mode slack shell-pop scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe restclient restart-emacs rbenv rake rainbow-mode rainbow-identifiers rainbow-delimiters quelpa puppet-mode pug-mode persp-mode paradox orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file ob-http nlinum-relative neotree multi-term move-text mmm-mode minitest markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode link-hint less-css-mode keyfreq js2-refactor js-doc jinja2-mode intero info+ indent-guide ido-vertical-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets groovy-mode gradle-mode google-translate golden-ratio gnuplot gmail-message-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md flyspell-correct-helm flycheck-pos-tip flycheck-haskell flx-ido fill-column-indicator fasd fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-snipe evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks ensime emmet-mode elisp-slime-nav elfeed-web elfeed-org elfeed-goodies edit-server dumb-jump dockerfile-mode docker diff-hl define-word darktooth-theme company-web company-tern company-statistics company-ghci company-ghc company-cabal company-auctex command-log-mode column-enforce-mode color-identifiers-mode coffee-mode cmm-mode clojure-snippets clj-refactor clean-aindent-mode cider-eval-sexp-fu chruby bundler auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile ansible-doc ansible aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
