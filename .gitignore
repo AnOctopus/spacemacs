@@ -52,3 +52,5 @@ private/
 !private/local/README.md
 /games/
 /recentf~
+/custom.el
+/ensime
