@@ -17,6 +17,7 @@
     company
     elfeed
     evil
+    ;; evil-cleverparens
     evil-escape
     evil-evilified-state
     evil-surround
@@ -28,6 +29,7 @@
     magit
     mu4e
     neotree
+    notmuch
     org
     org-agenda
     ranger
@@ -186,18 +188,15 @@
         "wq" 'delete-window)
       (kl/leader-alias-of "é" "w"))))
 
-;; HACK: These are defined by the spacemacs-bootstrap layer, and this is the
-;; only I've found to make them stick.  An unfortunate consequence of using
-;; `kl|config evil' twice is that user hooks for this configuration will be run
-;; twice as well.
-(defun keyboard-layout/post-init-evil ()
-  (kl|config evil
-    :description
-    "Remap `evil' bindings."
-    :colemak-jkhl
-    (progn
-      (define-key evil-normal-state-map "K" nil)
-      (define-key evil-normal-state-map "L" 'spacemacs/evil-smart-doc-lookup))))
+;; (defun keyboard-layout/pre-init-evil-cleverparens ()
+;;   (kl|config evil-cleverparens
+;;     :description
+;;     "Remap `evil-cleverparens' bindings."
+;;     :loader
+;;     (spacemacs|use-package-add-hook evil-cleverparens :post-init BODY)
+;;     :colemak
+;;     (kl/set-in-states '(normal visual)
+;;        )))
 
 (defun keyboard-layout/pre-init-evil-escape ()
   (kl|config evil-escape
@@ -440,6 +439,29 @@
     (kl/set-in-state (evil-get-auxiliary-keymap neotree-mode-map 'evilified)
                      "h" 'neotree-hidden-file-toggle
                      "k" 'neotree-rename-node)))
+
+(defun keyboard-layout/pre-init-notmuch ()
+  (kl|config notmuch
+    :descripition
+    "Remap keys in `notmuch'"
+    :loader
+    (spacemacs|use-package-add-hook notmuch :post-config BODY)
+    ;; :common
+    ;; (dolist (map (list ;; notmuch-common-keymap
+    ;;                    notmuch-hello-mode-map
+    ;;                    ))
+    ;;   (kl/evil-correct-keys 'normal map
+    ;;     "h"
+    ;;     "j"
+    ;;     "k"
+    ;;     "l"))
+    :colemak
+    (kl/evil-correct-keys 'evilified notmuch-common-keymap
+      "h"
+      "j"
+      "k"
+      "l")
+    ))
 
 (defun keyboard-layout/pre-init-org ()
   (kl|config org
