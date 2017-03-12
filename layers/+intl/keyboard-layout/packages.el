@@ -17,7 +17,7 @@
     company
     elfeed
     evil
-    ;; evil-cleverparens
+    evil-cleverparens
     evil-escape
     evil-evilified-state
     evil-surround
@@ -188,15 +188,26 @@
         "wq" 'delete-window)
       (kl/leader-alias-of "é" "w"))))
 
-;; (defun keyboard-layout/pre-init-evil-cleverparens ()
-;;   (kl|config evil-cleverparens
-;;     :description
-;;     "Remap `evil-cleverparens' bindings."
-;;     :loader
-;;     (spacemacs|use-package-add-hook evil-cleverparens :post-init BODY)
-;;     :colemak
-;;     (kl/set-in-states '(normal visual)
-;;        )))
+(defun keyboard-layout/pre-init-evil-cleverparens ()
+  (kl|config evil-cleverparens
+    :description
+    "Remap `evil-cleverparens' bindings."
+    :loader
+    (with-eval-after-load 'evil-cleverparens BODY)
+    :common
+    (progn
+      (kl/evil-correct-keys 'normal evil-cleverparens-mode-map
+        "h"
+        "j"
+        "k"
+        "l"
+        ;;
+        "H"
+        "J"
+        "K"
+        "L"
+        )
+      )))
 
 (defun keyboard-layout/pre-init-evil-escape ()
   (kl|config evil-escape
