@@ -57,6 +57,7 @@ values."
      latex
      markdown
      nlinum
+     no-dots
      notmuch
      (org :variables
           org-agenda-files '("~/sync/org")
