@@ -47,9 +47,9 @@ values."
              elfeed-goodies/entry-pane-position 'bottom)
      emacs-lisp
      erc
-     evil-cleverparens
      (evil-snipe :variables
                  evil-snipe-enable-alternate-f-and-t-behaviors t)
+     evil-cleverparens
      fasd
      git
      groovy
@@ -147,8 +147,7 @@ values."
    ;; `recents' `bookmarks' `projects' `agenda' `todos'."
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
-   dotspacemacs-startup-lists '((recents . 5)
-                                (projects . 7)
+   dotspacemacs-startup-lists '((projects . 7)
                                 (agenda . 3)
                                 (todos . 3))
    ;; True if the home buffer should respond to resize events.
@@ -194,7 +193,7 @@ values."
    ;; and TAB or <C-m> and RET.
    ;; In the terminal, these pairs are generally indistinguishable, so this only
    ;; works in the GUI. (default nil)
-   dotspacemacs-distinguish-gui-tab nil
+   dotspacemacs-distinguish-gui-tab t
    ;; If non nil `Y' is remapped to `y$' in Evil states. (default nil)
    dotspacemacs-remap-Y-to-y$ nil
    ;; If non-nil, the shift mappings `<' and `>' retain visual state if used
@@ -351,9 +350,14 @@ you should place your code here."
    spacemacs-useful-buffers-regexp '("\\*\\(scratch\\|spacemacs\\|notmuch.*\\)\\*")
    )
   (load custom-file)
-  (spacemacs/toggle-evil-cleverparens-on)
-  (add-hook 'clojure-mode-hook #'evil-cleverparens-mode)
   (define-key evil-normal-state-map (kbd "SPC #") #'server-edit)
   (magit-define-popup-switch 'magit-log-popup
     ?m "Omit merge commits" "--no-merges" t)
+
+  (spacemacs/toggle-highlight-long-lines-globally-on)
+  (spacemacs/toggle-truncate-lines-off)
+
+  (spacemacs/toggle-evil-cleverparens-on)
+  ;; (add-hook 'lisp-mode-hook #'evil-cleverparens-mode)
+  (add-hook 'clojure-mode-hook #'evil-cleverparens-mode)
   )
