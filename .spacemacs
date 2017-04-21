@@ -62,8 +62,20 @@ values."
               notmuch-search-oldest-first nil
               notmuch-show-logo nil)
      (org :variables
+          org-log-refile 'time
+          org-refile-use-outline-path 'file
           org-agenda-files '("~/sync/org")
-          org-refile-allow-creating-parent-nodes 'confirm)
+          org-refile-allow-creating-parent-nodes 'confirm
+          org-todo-keywords '("TODO(t)"
+                              "STARTED(s)"
+                              "WAITING(w)"
+                              "|"
+                              "CANCELLED(c)"
+                              "DONE(d)")
+          org-capture-templates '(("t" "Todo" entry (file+headline "notes.org" "Tasks")
+                                   "* TODO %?\n  %u\n  %i\n")
+                                  ("e" "Email Task" entry (file+headline "notes.org" "Tasks")
+                                   "* TODO %?\n %a\n %u\n %i\n")))
      php
      puppet
      react
