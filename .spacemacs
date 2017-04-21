@@ -81,7 +81,8 @@ values."
      react
      restclient
      (scala :variables
-            scala-enable-eldoc t)
+            scala-enable-eldoc t
+            ensime-graphical-tooltips t)
      shell
      shell-scripts
      slack
@@ -161,9 +162,7 @@ values."
    ;; `recents' `bookmarks' `projects' `agenda' `todos'."
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
-   dotspacemacs-startup-lists '((projects . 7)
-                                (agenda . 3)
-                                (todos . 3))
+   dotspacemacs-startup-lists '((projects . 7))
    ;; True if the home buffer should respond to resize events.
    dotspacemacs-startup-buffer-responsive t
    ;; Default major mode of the scratch buffer (default `text-mode')
@@ -209,7 +208,7 @@ values."
    ;; works in the GUI. (default nil)
    dotspacemacs-distinguish-gui-tab t
    ;; If non nil `Y' is remapped to `y$' in Evil states. (default nil)
-   dotspacemacs-remap-Y-to-y$ nil
+   dotspacemacs-remap-Y-to-y$ t
    ;; If non-nil, the shift mappings `<' and `>' retain visual state if used
    ;; there. (default t)
    dotspacemacs-retain-visual-state-on-shift t
@@ -374,4 +373,6 @@ you should place your code here."
   (spacemacs/toggle-evil-cleverparens-on)
   ;; (add-hook 'lisp-mode-hook #'evil-cleverparens-mode)
   (add-hook 'clojure-mode-hook #'evil-cleverparens-mode)
+  (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode)
+  (custom-set-faces '(font-lock-comment-face ((t (:foreground "deep sky blue")))))
   )
