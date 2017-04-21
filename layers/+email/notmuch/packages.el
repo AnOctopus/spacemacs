@@ -27,4 +27,11 @@
       (evilified-state-evilify notmuch-tree-mode notmuch-tree-mode-map)
       (evilified-state-evilify notmuch-search-mode notmuch-search-mode-map
         (kbd "d") #'notmuch/notmuch-toggle-delete-search)
-      )))
+      ))
+  (use-package smtpmail
+    :config
+    (setq message-send-mail-function 'smtpmail-send-it
+          smtpmail-stream-type 'starttls
+          smtpmail-default-smtp-server "smtp.gmail.com"
+          smtpmail-smtp-server "smtp.gmail.com"
+          smtpmail-smtp-service 587)))
