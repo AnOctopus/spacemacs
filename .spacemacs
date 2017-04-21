@@ -58,7 +58,9 @@ values."
      markdown
      nlinum
      no-dots
-     notmuch
+     (notmuch :variables
+              notmuch-search-oldest-first nil
+              notmuch-show-logo nil)
      (org :variables
           org-agenda-files '("~/sync/org")
           org-refile-allow-creating-parent-nodes 'confirm)
