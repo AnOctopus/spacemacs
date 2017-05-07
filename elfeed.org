@@ -1,13 +1,10 @@
 * Blogs :elfeed:
 ** Software Engineering and Computer Science :programming:
-*** Agile :agile:
-**** http://feeds2.feedburner.com/IndustrialBlogic
 *** Emacs :emacs:
 *** Lisp :lisp:
 **** http://www.pvk.ca/atom.xml
 **** http://eli.thegreenplace.net/feeds/all.atom.xml
 *** Operations and System Administration :ops:
-**** http://patrobinson.github.io/feed.xml
 **** http://techblog.netflix.com/rss.xml
 
 *** http://mrale.ph/atom.xml
@@ -76,7 +73,6 @@
 *** http://www.cliffc.org/blog/feed/
 *** https://codeascraft.com/feed/atom/
 ** Anime :anime:
-*** http://www.someanithing.com/feed
 *** http://yuri-ism.com/feed/
 ** Rationality :rationality:
 *** https://thezvi.wordpress.com/feed/
@@ -96,14 +92,11 @@
 *** http://terrytao.wordpress.com/feed/
 *** http://qntm.org/rss.php
 ** Science :science:
-*** http://fivethirtyeight.com/science/feed/
-*** http://what-if.xkcd.com/feed.atom
 *** http://www.badscience.net/feed/
 *** http://www.martyklein.com/category/blog/feed/
 *** http://www.annalspornographie.com/feed/
 ** Webcomics :webcomic:
 *** https://www.erfworld.com/erf_stream/view?view=rss
-*** https://twigserial.wordpress.com/feed/
 *** http://abstrusegoose.com/feed
 *** http://rsspect.com/rss/qwantz.xml
 *** http://feeds.feedburner.com/rsspect/fJur
@@ -112,27 +105,19 @@
 *** http://egscomics.com/rss.php
 *** http://nedroid.com/feed/
 *** http://www.rsspect.com/rss/pfsc.xml
-*** http://powernapcomic.com/rss.xml
 *** http://www.smbc-comics.com/rss.php
 *** http://feeds.feedburner.com/SchlockRSS
-*** http://feeds.feedburner.com/sluggy_freelance
 *** http://drmcninja.com/feed
 *** http://pbfcomics.com/feed/feed.xml
 *** http://xkcd.com/atom.xml
 *** http://oglaf.com/feeds/rss/
 *** http://www.sagaofsoul.com/rss.xml
-*** http://hpmor.com/rss.xml
 *** http://unsongbook.com/?feed=rss2
 *** http://wildbow.wordpress.com/feed/
-** Drawing :drawing:
-*** http://gunpowderchant.com/feed/
-*** https://twrlare.wordpress.com/feed/
 ** Games :gaming:
 *** http://www.sirlin.net/?format=rss
-*** http://speeddemosarchive.com/sda100.atom :speedruns:
 *** http://tasvideos.org/publications.rss :tas:
 *** http://www.bay12games.com/dwarves/dev_now.rss :dwarf_fortress:
-*** http://www.dotabuff.com/blog.rss :dota:
 *** Eve Online :eve:
 **** https://newsfeed.eveonline.com/en-US/44/articles/page/1/20
 **** https://newsfeed.eveonline.com/en-US/2/articles/page/1/20
@@ -141,13 +126,10 @@
 *** http://feeds.feedburner.com/thehealthyskeptic
 *** http://healthcorrelator.blogspot.com/feeds/posts/default
 ** Economics and Politics :econ:
-*** http://fivethirtyeight.com/economics/feed/
 *** http://daviddfriedman.blogspot.fr/atom.xml
 *** http://urbankchoze.blogspot.com/feeds/posts/default
 *** http://noahpinionblog.blogspot.com/feeds/posts/default
 *** http://feeds.feedburner.com/Themoneyillusion
 *** http://feeds.feedburner.com/marginalrevolution/feed
-** Japan :japan:
-*** http://www.tofugu.com/feed.xml
 ** Misc
 *** http://waitbutwhy.com/feed
