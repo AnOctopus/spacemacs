@@ -62,10 +62,13 @@ values."
               notmuch-search-oldest-first nil
               notmuch-show-logo nil)
      (org :variables
+          org-directory "~/sync/org"
           org-log-refile 'time
           org-refile-use-outline-path 'file
           org-agenda-files '("~/sync/org")
+          org-agenda-todo-ignore-scheduled 'all
           org-refile-allow-creating-parent-nodes 'confirm
+          org-pomodoro-keep-killed-pomodoro-time t
           org-todo-keywords '("TODO(t)"
                               "STARTED(s)"
                               "WAITING(w)"
@@ -78,6 +81,7 @@ values."
                                    "* TODO %?\n %a\n %u\n %i\n")))
      php
      puppet
+     python
      react
      restclient
      (scala :variables
@@ -375,4 +379,9 @@ you should place your code here."
   (add-hook 'clojure-mode-hook #'evil-cleverparens-mode)
   (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode)
   (custom-set-faces '(font-lock-comment-face ((t (:foreground "deep sky blue")))))
+  (spacemacs/set-leader-keys-for-major-mode 'org-agenda-mode
+    "r" 'org-agenda-refile
+    "e" 'org-agenda-set-effort)
+  (spacemacs/set-leader-keys
+    "aop" 'org-pomodoro)
   )
