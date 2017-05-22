@@ -52,6 +52,7 @@ values."
      evil-cleverparens
      fasd
      git
+     graphviz
      groovy
      haskell
      latex
@@ -384,4 +385,6 @@ you should place your code here."
     "e" 'org-agenda-set-effort)
   (spacemacs/set-leader-keys
     "aop" 'org-pomodoro)
+  (spacemacs/set-leader-keys-for-major-mode 'scala-mode
+    "nq" 'ensime-disconnect)
   )
