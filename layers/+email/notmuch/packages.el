@@ -29,9 +29,14 @@
         (kbd "d") #'notmuch/notmuch-toggle-delete-search)
       ))
   (use-package smtpmail
+    :defer t
+    :ensure t
     :config
-    (setq message-send-mail-function 'smtpmail-send-it
-          smtpmail-stream-type 'starttls
-          smtpmail-default-smtp-server "smtp.gmail.com"
-          smtpmail-smtp-server "smtp.gmail.com"
-          smtpmail-smtp-service 587)))
+    (setq
+     user-mail-address "amanda@amandawalker.io"
+     user-full-name "Amanda Walker"
+     message-send-mail-function 'smtpmail-send-it
+     smtpmail-stream-type 'starttls
+     smtpmail-default-smtp-server "smtp.gmail.com"
+     smtpmail-smtp-server "smtp.gmail.com"
+     smtpmail-smtp-service 587)))

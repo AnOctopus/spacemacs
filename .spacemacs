@@ -359,7 +359,6 @@ you should place your code here."
   (setq-default
    evil-want-Y-yank-to-eol t
    evil-move-cursor-back nil
-   ;; truncate-lines t
    nxml-child-indent 4
    nxml-slash-auto-complete-flag t
    )
@@ -374,6 +373,7 @@ you should place your code here."
 
   (spacemacs/toggle-highlight-long-lines-globally-on)
   (spacemacs/toggle-truncate-lines-off)
+  (add-hook 'org-mode-hook #'spacemacs/toggle-truncate-lines-off)
 
   (spacemacs/toggle-evil-cleverparens-on)
   ;; (add-hook 'lisp-mode-hook #'evil-cleverparens-mode)
@@ -385,6 +385,7 @@ you should place your code here."
     "e" 'org-agenda-set-effort)
   (spacemacs/set-leader-keys
     "aop" 'org-pomodoro)
-  (spacemacs/set-leader-keys-for-major-mode 'scala-mode
-    "nq" 'ensime-disconnect)
+  ;; (spacemacs/set-leader-keys-for-major-mode 'scala-mode
+  ;;   "nq" 'ensime-disconnect)
+  (unbind-key (kbd "C") helm-map)
   )
