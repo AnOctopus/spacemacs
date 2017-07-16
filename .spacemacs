@@ -334,8 +334,6 @@ values."
    ;; (default nil)
    dotspacemacs-whitespace-cleanup 'changed
    )
-  (add-to-list 'configuration-layer--elpa-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
-  (add-to-list 'package-pinned-packages '(ensime . "melpa-stable") t)
   (setq custom-file "~/.emacs.d/custom.el")
   )
 
@@ -347,6 +345,10 @@ executes.
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
   (setq custom-file "~/.emacs.d/custom.el")
+  (add-to-list 'configuration-layer--elpa-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
+  (add-to-list 'package-pinned-packages '(ensime . "melpa-stable") t)
+  (add-to-list 'package-pinned-packages '(sbt-mode . "melpa-stable") t)
+  (add-to-list 'package-pinned-packages '(scala-mode . "melpa-stable") t)
   )
 
 (defun dotspacemacs/user-config ()
