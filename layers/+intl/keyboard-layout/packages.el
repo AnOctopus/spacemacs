@@ -466,7 +466,7 @@
     ;;     "j"
     ;;     "k"
     ;;     "l"))
-    :colemak
+    :colemak-hnei
     (kl/evil-correct-keys 'evilified notmuch-common-keymap
       "h"
       "j"

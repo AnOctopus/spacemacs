@@ -45,6 +45,6 @@
         "tt" 'gradle-single-test))))
 
 (defun groovy/post-init-flycheck ()
-  (spacemacs/add-flycheck-hook 'groovy-mode-hook))
+  (spacemacs/enable-flycheck 'groovy-mode))
 
  ;;; packages.el ends here

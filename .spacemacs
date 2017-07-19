@@ -32,7 +32,7 @@ values."
    dotspacemacs-configuration-layers
    '(
      (keyboard-layout :variables
-                      kl-layout 'colemak)
+                      kl-layout 'colemak-hnei)
      ansible
      auto-completion
      chrome
@@ -370,8 +370,8 @@ you should place your code here."
    )
   (load custom-file)
   (define-key evil-normal-state-map (kbd "SPC #") #'server-edit)
-  (magit-define-popup-switch 'magit-log-popup
-    ?m "Omit merge commits" "--no-merges" t)
+  ;; (magit-define-popup-switch 'magit-log-popup
+  ;;   ?m "Omit merge commits" "--no-merges" t)
 
   (spacemacs/toggle-highlight-long-lines-globally-on)
   (spacemacs/toggle-truncate-lines-off)
