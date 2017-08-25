@@ -290,6 +290,7 @@ Will work on both org-mode and any mode that accepts plain html."
         "aoki" 'org-clock-in-last
         "aokj" 'org-clock-jump-to-current-clock
         "aoko" 'org-clock-out
+        "aokr" 'org-resolve-clocks
         "aol" 'org-store-link
         "aom" 'org-tags-view
         "aoo" 'org-agenda
@@ -463,8 +464,7 @@ Headline^^            Visit entry^^               Filter^^                    Da
     :init
     (progn
       (spacemacs/set-leader-keys
-        "aob" 'org-brain-open
-        "aoB" 'org-brain-visualize)
+        "aob" 'org-brain-visualize)
       (evil-set-initial-state 'org-brain-visualize-mode 'emacs))))
 
 (defun org/init-org-expiry ()
@@ -549,7 +549,8 @@ Headline^^            Visit entry^^               Filter^^                    Da
       (spacemacs/set-leader-keys
         "aop" 'org-projectile/capture
         "po" 'org-projectile/goto-todos)
-      (require 'org-projectile))
+      (with-eval-after-load 'org-capture
+        (require 'org-projectile)))
     :config
     (if (file-name-absolute-p org-projectile-file)
         (progn
