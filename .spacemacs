@@ -65,10 +65,9 @@ values."
      (org :variables
           org-directory "~/sync/org"
           org-log-refile 'time
-          org-refile-use-outline-path 'file
           org-agenda-files '("~/sync/org")
           org-agenda-todo-ignore-scheduled 'all
-          org-refile-allow-creating-parent-nodes 'confirm
+          org-agenda-start-on-weekday nil
           org-pomodoro-keep-killed-pomodoro-time t
           org-todo-keywords '("TODO(t)"
                               "STARTED(s)"
