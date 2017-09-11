@@ -1,50 +1,46 @@
-;;; packages.el --- Groovy layer packages file for Spacemacs.
+;;; packages.el --- Groovy Layer packages File for Spacemacs
 ;;
-;; Copyright (c) 2012-2016 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2017 Sylvain Benner & Contributors
 ;;
-;; Author: Johnson Denen <johnson.denen@gmail.com>
+;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
- ;;; License: GPLv3
+;;; License: GPLv3
 
-(defconst groovy-packages
-  '(
-    flycheck
-    gradle-mode
-    groovy-mode
-    ))
+(setq groovy-packages
+      '(
+        company
+        groovy-imports
+        groovy-mode
+        org
+        ))
 
-(defun groovy/init-gradle-mode ()
-  (use-package gradle-mode
+(defun groovy/post-init-company ()
+  (spacemacs|add-company-backends :modes groovy-mode))
+
+(defun groovy/init-groovy-imports ()
+  (use-package groovy-imports
     :defer t))
 
 (defun groovy/init-groovy-mode ()
   (use-package groovy-mode
     :defer t
     :mode "Jenkinsfile\\'"
-    :config
+    :init
     (progn
-      (add-hook 'groovy-mode-hook 'gradle-mode)
-      (spacemacs/declare-prefix-for-mode 'groovy-mode "ms" "send")
-      (spacemacs/declare-prefix-for-mode 'groovy-mode "mc" "build")
-      (spacemacs/declare-prefix-for-mode 'groovy-mode "mt" "test")
+      (spacemacs/declare-prefix-for-mode 'groovy-mode "ms" "REPL")
       (spacemacs/set-leader-keys-for-major-mode 'groovy-mode
-        "sb" 'groovy-load-file
-        "si" 'run-groovy
+        "'"  'run-groovy
+        "sB" 'spacemacs/groovy-load-file-switch
+        "sb" 'spacemacs/groovy-load-file
+        "sF" 'spacemacs/groovy-send-definition-switch
         "sf" 'groovy-send-definition
-        "sF" 'groovy-send-definition-and-go
-        "sr" 'groovy-send-region
-        "sR" 'groovy-send-region-and-go
-        "cc" 'gradle-build
-        "cr" 'groovy/gradle-clean-build
-        "ct" 'gradle-execute
-        "ta" 'gradle-test
-        "tb" 'groovy/gradle-test-buffer
-        "tt" 'gradle-single-test))))
+        "si" 'run-groovy
+        "sR" 'spacemacs/groovy-send-region-switch
+        "sr" 'groovy-send-region))))
 
-(defun groovy/post-init-flycheck ()
-  (spacemacs/enable-flycheck 'groovy-mode))
-
- ;;; packages.el ends here
+(defun groovy/pre-init-org ()
+  (spacemacs|use-package-add-hook org
+    :post-config (add-to-list 'org-babel-load-languages '(groovy . t))))
