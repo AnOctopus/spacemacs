@@ -40,11 +40,11 @@ values."
      colors
      command-log
      docker
-     (elfeed :variables
-             rmh-elfeed-org-files '("~/.emacs.d/elfeed.org")
-             elfeed-db-directory "~/sync/.elfeed"
-             elfeed-sort-order 'ascending
-             elfeed-goodies/entry-pane-position 'bottom)
+     ;; (elfeed :variables
+     ;;         rmh-elfeed-org-files '("~/.emacs.d/elfeed.org")
+     ;;         elfeed-db-directory "~/sync/.elfeed"
+     ;;         elfeed-sort-order 'ascending
+     ;;         elfeed-goodies/entry-pane-position 'bottom)
      emacs-lisp
      erc
      (evil-snipe :variables
@@ -55,6 +55,7 @@ values."
      graphviz
      groovy
      haskell
+     java
      latex
      markdown
      nlinum
