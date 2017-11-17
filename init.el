@@ -25,9 +25,7 @@
     (error (concat "Your version of Emacs (%s) is too old. "
                    "Spacemacs requires Emacs version %s or above.")
            emacs-version spacemacs-emacs-min-version)
-  ;; (load-file (concat (file-name-directory load-file-name)
-  ;;                    "core/core-load-paths.el"))
-  ;; (setq dotspacemacs-filepath "~/.emacs.d/.spacemacs")
+  (setq dotspacemacs-filepath "~/.emacs.d/.spacemacs")
   (require 'core-spacemacs)
   (configuration-layer/load-lock-file)
   (spacemacs/init)
