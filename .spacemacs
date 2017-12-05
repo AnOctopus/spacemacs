@@ -30,7 +30,7 @@ values."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
+   '(go
      (keyboard-layout :variables
                       kl-layout 'colemak-hnei)
      ansible
@@ -40,11 +40,6 @@ values."
      colors
      command-log
      docker
-     ;; (elfeed :variables
-     ;;         rmh-elfeed-org-files '("~/.emacs.d/elfeed.org")
-     ;;         elfeed-db-directory "~/sync/.elfeed"
-     ;;         elfeed-sort-order 'ascending
-     ;;         elfeed-goodies/entry-pane-position 'bottom)
      emacs-lisp
      erc
      (evil-snipe :variables
@@ -58,6 +53,14 @@ values."
      java
      latex
      markdown
+     (mu4e :variables
+           mu4e-enable-notifications t
+           mu4e-enable-mode-line t
+           mu4e-get-mail-command "mbsync -a"
+           mu4e-maildir "~/maildir"
+           mu4e-account-alist t
+
+           mu4e-context-policy 'pick-first)
      nlinum
      no-dots
      (notmuch :variables
@@ -104,6 +107,7 @@ values."
    dotspacemacs-additional-packages
    '(
      keyfreq
+     darktooth-theme
      )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -345,10 +349,15 @@ executes.
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
   (setq custom-file "~/.emacs.d/custom.el")
-  (add-to-list 'configuration-layer--elpa-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
-  (add-to-list 'package-pinned-packages '(ensime . "melpa-stable") t)
-  (add-to-list 'package-pinned-packages '(sbt-mode . "melpa-stable") t)
-  (add-to-list 'package-pinned-packages '(scala-mode . "melpa-stable") t)
+  ;; (setq configuration-layer-elpa-archives
+  ;;       '(("melpa"    . "melpa.org/packages/")
+  ;;         ("org"      . "orgmode.org/elpa/")
+  ;;         ("gnu"      . "elpa.gnu.org/packages/")
+  ;;         ("melpa-stable" . "http://stable.melpa.org/packages/")))
+  ;; (add-to-list 'configuration-layer--elpa-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
+  ;; (add-to-list 'package-pinned-packages '(ensime . "melpa-stable") t)
+  ;; (add-to-list 'package-pinned-packages '(sbt-mode . "melpa-stable") t)
+  ;; (add-to-list 'package-pinned-packages '(scala-mode . "melpa-stable") t)
   )
 
 (defun dotspacemacs/user-config ()
@@ -387,7 +396,45 @@ you should place your code here."
     "e" 'org-agenda-set-effort)
   (spacemacs/set-leader-keys
     "aop" 'org-pomodoro)
+  ;; (defun projectile-ignore-pacaur (project-root-dir)
+  ;;   "Returns `t' for pacaur cache directories, and nil otherwise"
+  ;;   ())
   ;; (spacemacs/set-leader-keys-for-major-mode 'scala-mode
   ;;   "nq" 'ensime-disconnect)
-  (unbind-key (kbd "C") helm-map)
+  ;; (unbind-key (kbd "C") helm-map)
+  (setq
+   mu4e-sent-folder "/namecheap/Sent"
+   mu4e-drafts-folder "/namecheap/Drafts"
+   mu4e-trash-folder "/namecheap/Trash"
+   )
+
+  (with-eval-after-load 'mu4e
+    (setq  mu4e-contexts
+           `(,(make-mu4e-context
+               :name "namecheap"
+               :match-func (lambda (msg)
+                             (when msg
+                               (mu4e-message-contact-field-matches msg
+                                                                   :to "amanda@amandawalker.io")))
+               :vars '((user-mail-address . "amanda@amandawalker.io")
+                       (mu4e-trash-folder . "/namecheap/Trash")
+                       (mu4e-sent-folder . "/namecheap/Sent")
+                       (mu4e-drafts-folder . "/namecheap/Drafts")
+                       ))
+             ,(make-mu4e-context
+               :name "gmail"
+               :match-func (lambda (msg)
+                             (when msg
+                               (or
+                                (mu4e-message-contact-field-matches msg
+                                                                    :to "sean.andrew.walker@gmail.com")
+                                (mu4e-message-contact-field-matches msg
+                                                                    :to "crazy.gold.shield@gmail.com"))))
+               :vars '((user-mail-address . "sean.andrew.walker@gmail.com")
+                       (mu4e-sent-messages-behavior . delete)
+                       (mu4e-sent-folder . "/gmail/[Gmail]/.Sent Mail")
+                       (mu4e-drafts-folder . "/gmail/[Gmail]/.Drafts")
+                       (mu4e-trash-folder . "/gmail/[Gmail]/.Trash")))))
+    )
+
   )
