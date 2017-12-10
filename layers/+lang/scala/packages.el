@@ -34,6 +34,7 @@
 (defun scala/post-init-ensime ()
   (use-package ensime
     :defer t
+    ;; :pin melpa-stable
     :init
     (progn
       (add-hook 'scala-mode-hook #'spacemacs//scala-setup-ensime)
