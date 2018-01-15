@@ -63,9 +63,6 @@ values."
            mu4e-context-policy 'pick-first)
      nlinum
      no-dots
-     (notmuch :variables
-              notmuch-search-oldest-first nil
-              notmuch-show-logo nil)
      (org :variables
           org-directory "~/sync/org"
           org-log-refile 'time
@@ -109,6 +106,7 @@ values."
    '(
      keyfreq
      darktooth-theme
+     dired-narrow
      )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -431,9 +429,12 @@ you should place your code here."
                                                                     :to "crazy.gold.shield@gmail.com"))))
                :vars '((user-mail-address . "sean.andrew.walker@gmail.com")
                        (mu4e-sent-messages-behavior . delete)
-                       (mu4e-sent-folder . "/gmail/[Gmail]/.Sent Mail")
-                       (mu4e-drafts-folder . "/gmail/[Gmail]/.Drafts")
-                       (mu4e-trash-folder . "/gmail/[Gmail]/.Trash")))))
+                       (mu4e-sent-folder . "/gmail/[Gmail]/Sent Mail")
+                       (mu4e-drafts-folder . "/gmail/[Gmail]/Drafts")
+                       (mu4e-trash-folder . "/gmail/[Gmail]/Trash")))))
     )
-
+  (with-eval-after-load 'mu4e-alert
+    (mu4e-alert-set-default-style 'notifications))
+  (advice-add #'shr-colorize-region :around (defun shr-no-colourise-region (&rest ignore)))
+  (setq shr-use-fonts nil)
   )
