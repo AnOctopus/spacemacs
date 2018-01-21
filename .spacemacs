@@ -195,7 +195,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 16
+                               :size 14
                                :weight normal
                                :width normal
                                :powerline-scale 1.3)
@@ -384,7 +384,6 @@ you should place your code here."
   (add-hook 'org-mode-hook #'spacemacs/toggle-truncate-lines-off)
 
   (spacemacs/toggle-evil-cleverparens-on)
-  ;; (add-hook 'lisp-mode-hook #'evil-cleverparens-mode)
   (add-hook 'clojure-mode-hook #'evil-cleverparens-mode)
   (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode)
   (custom-set-faces '(font-lock-comment-face ((t (:foreground "deep sky blue")))))
@@ -393,9 +392,6 @@ you should place your code here."
     "e" 'org-agenda-set-effort)
   (spacemacs/set-leader-keys
     "aop" 'org-pomodoro)
-  ;; (defun projectile-ignore-pacaur (project-root-dir)
-  ;;   "Returns `t' for pacaur cache directories, and nil otherwise"
-  ;;   ())
   ;; (spacemacs/set-leader-keys-for-major-mode 'scala-mode
   ;;   "nq" 'ensime-disconnect)
   ;; (unbind-key (kbd "C") helm-map)
@@ -437,4 +433,6 @@ you should place your code here."
     (mu4e-alert-set-default-style 'notifications))
   (advice-add #'shr-colorize-region :around (defun shr-no-colourise-region (&rest ignore)))
   (setq shr-use-fonts nil)
+  (keyfreq-mode 1)
+  (keyfreq-autosave-mode 1)
   )
