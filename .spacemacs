@@ -30,10 +30,9 @@ values."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(go
+   '(
      (keyboard-layout :variables
                       kl-layout 'colemak-hnei)
-     ansible
      auto-completion
      chrome
      clojure
@@ -44,11 +43,9 @@ values."
      erc
      (evil-snipe :variables
                  evil-snipe-enable-alternate-f-and-t-behaviors t)
-     evil-cleverparens
      fasd
      git
      graphviz
-     groovy
      haskell
      java
      latex
@@ -80,20 +77,14 @@ values."
                                    "* TODO %?\n  %u\n  %i\n")
                                   ("e" "Email Task" entry (file+headline "notes.org" "Tasks")
                                    "* TODO %?\n %a\n %u\n %i\n")))
-     php
-     puppet
-     python
      react
-     restclient
      (scala :variables
             scala-enable-eldoc t
             ensime-graphical-tooltips t
             ensime-startup-notification nil)
      shell
      shell-scripts
-     slack
      spell-checking
-     sql
      syntax-checking
      (version-control :variables version-control-diff-tool 'git-gutter)
      yaml
@@ -195,7 +186,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 14
+                               :size 20
                                :weight normal
                                :width normal
                                :powerline-scale 1.3)
@@ -383,18 +374,12 @@ you should place your code here."
   (spacemacs/toggle-truncate-lines-off)
   (add-hook 'org-mode-hook #'spacemacs/toggle-truncate-lines-off)
 
-  (spacemacs/toggle-evil-cleverparens-on)
-  (add-hook 'clojure-mode-hook #'evil-cleverparens-mode)
-  (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode)
   (custom-set-faces '(font-lock-comment-face ((t (:foreground "deep sky blue")))))
   (spacemacs/set-leader-keys-for-major-mode 'org-agenda-mode
     "r" 'org-agenda-refile
     "e" 'org-agenda-set-effort)
   (spacemacs/set-leader-keys
     "aop" 'org-pomodoro)
-  ;; (spacemacs/set-leader-keys-for-major-mode 'scala-mode
-  ;;   "nq" 'ensime-disconnect)
-  ;; (unbind-key (kbd "C") helm-map)
   (setq
    mu4e-sent-folder "/namecheap/Sent"
    mu4e-drafts-folder "/namecheap/Drafts"
@@ -435,4 +420,6 @@ you should place your code here."
   (setq shr-use-fonts nil)
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1)
+  (spacemacs/set-leader-keys
+    "xc" 'count-words)
   )
