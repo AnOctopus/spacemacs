@@ -1,6 +1,6 @@
 <a name="top" id="fork-destination-box"></a>
 <a href="http://spacemacs.org"><img src="https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg" alt="Made with Spacemacs"></a><a href="http://www.twitter.com/spacemacs"><img src="http://i.imgur.com/tXSoThF.png" alt="Twitter" align="right"></a><br>
-***
+- - -
 <p align="center"><img src="/doc/img/title2.png" alt="Spacemacs"/></p>
 <p align="center">
 <b><a href="http://spacemacs.org/doc/DOCUMENTATION#core-pillars">philosophy</a></b>
@@ -17,7 +17,9 @@
 |
 <b><a href="http://spacemacs.org/doc/FAQ">FAQ</a></b>
 </p>
-***
+
+- - -
+
 <p align="center">
 <a href="https://gitter.im/syl20bnr/spacemacs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://badges.gitter.im/Join Chat.svg" alt="Gitter"></a>
 <a href="https://circleci.com/gh/syl20bnr/spacemacs/tree/develop"><img src="https://circleci.com/gh/syl20bnr/spacemacs/tree/develop.svg?style=shield" alt="Build Status"></a>
@@ -26,7 +28,9 @@
 <a href="https://shop.spreadshirt.com/spacemacs-shop"><img src="https://img.shields.io/badge/Shop-T--Shirts-blue.svg" alt="Donate"></a>
 <a href="http://www.slant.co/topics/12/~what-are-the-best-programming-text-editors"><img src="https://img.shields.io/badge/Slant-Recommend-ff69b4.svg" alt="Recommend it"></a>
 </p>
-***
+
+- - -
+
 
 **Quick Install:**
 
@@ -144,50 +148,65 @@ Emacs has graphical support.
 This might also be true for other linux distributions.
 
 ### macOS
-The recommended way of installing Emacs on macOS is using [Homebrew][]. It's a
-package manager for macOS. Once Homebrew is installed, run the following
-commands in the terminal to install both Emacs and the default Source Code Pro
-font:
 
-```sh
+#### Install emacs
+
+##### Using emacs-plus
+
+```
 brew tap d12frosted/emacs-plus
 brew install emacs-plus
-brew linkapps emacs-plus
+ln -s /usr/local/Cellar/emacs-plus/*/Emacs.app/ /Applications/
+```
+
+##### Using emacs-mac
+
+```
+brew tap railwaycat/emacsmacport
+brew install emacs-mac
+```
+
+Copy and paste the symlink (`ln`) from the install instructions if `brew linkapps`
+is deprecated.
+
+##### Using cask
+
+Homebrew now recommends to use the cask version with the following message:
+"Please try the Cask for a better-supported Cocoa version". To install the cask
+version:
+
+```
+brew cask install emacs
+```
+
+This installs a pre-built package from https://emacsformacosx.com/
+
+##### Other ways
+
+If you're not comfortable with the ways mentioned above, then
+[EmacsWiki](https://www.emacswiki.org/emacs/EmacsForMacOS#toc12) lists down
+a few ways to install Emacs for Mac OS.
+
+#### Install Source Code Pro font
+
+Once Emacs is installed, run the following commands in the terminal to install
+the default Source Code Pro font:
+
+```sh
 brew tap caskroom/fonts
 brew cask install font-source-code-pro
+```
+
+#### Install Spacemacs
+
+```
 git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
 ```
 
 **Notes:**
-The proposed `emacs-plus` tap is identical to the `emacs` formulae, it just
-builds GNU Emacs with support for several features by default, including the
-Spacemacs icon. See [emacs-plus][] for more information.
-
 After completing the Spacemacs [install process](#install), then it's also
 recommended to add the [osx layer][] to your [dotfile][]. Installation
 instructions are available in the documentation for the [osx layer][].
-
-If the powerline separators on the spaceline have a different (less saturated)
-color than the rest of the line, then you can add the following snippet to the
-`dotspacemacs/user-config` section in your `~/.spacemacs` file:
-
-```elisp
-(setq ns-use-srgb-colorspace nil)
-```
-
-Keep in mind that this is not an ideal solution as it affects all colours in
-Emacs. Another option is to change the powerline separators. For example to
-`alternate` or `bar`, they diminish the color difference. Or change them to
-`utf-8`, which makes them go away completely, without having to change colour
-space. In order to change the powerline separators, put the following snippet in
-the `dotspacemacs/user-config` section of your `~/.spacemacs` file:
-
-```eslip
-(setq powerline-default-separator 'utf-8)
-```
-
-For more information about powerline separators, please refer to the
-[powerline documentation][]
 
 ### Windows
 You can download good quality builds from the [emacs-w64 project][emacs-for-windows].

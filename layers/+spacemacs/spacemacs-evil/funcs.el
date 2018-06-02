@@ -41,6 +41,12 @@ Otherwise, revert to the default behavior (i.e. enable `evil-insert-state')."
     (evil-put-property 'evil-state-properties 'iedit-insert
                        :enable states)))
 
+(defun spacemacs//evil-escape-deactivate-in-holy-mode  (style)
+  "Deactivate `evil-escape' if STYLE is `emacs' otherwise enable it."
+  (if (memq style '(vim hybrid))
+      (evil-escape-mode t)
+    (evil-escape-mode -1)))
+
 
 ;; evil-search-highlight-persist
 

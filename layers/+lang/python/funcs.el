@@ -9,6 +9,86 @@
 ;;
 ;;; License: GPLv3
 
+(defun spacemacs//python-setup-backend ()
+  "Conditionally setup python backend."
+  (pcase python-backend
+    (`anaconda (spacemacs//python-setup-anaconda))
+    (`lsp (spacemacs//python-setup-lsp))))
+
+(defun spacemacs//python-setup-company ()
+  "Conditionally setup company based on backend."
+  (pcase python-backend
+    (`anaconda (spacemacs//python-setup-anaconda-company))
+    (`lsp (spacemacs//python-setup-lsp-company))))
+
+(defun spacemacs//python-setup-eldoc ()
+  "Conditionally setup eldoc based on backend."
+  (pcase python-backend
+    ;; lsp setup eldoc on its own
+    (`anaconda (spacemacs//python-setup-anaconda-eldoc))))
+
+
+;; anaconda
+
+(defun spacemacs//python-setup-anaconda ()
+  "Setup anaconda backend."
+  (anaconda-mode)
+  (add-to-list 'spacemacs-jump-handlers-python-mode
+               '(anaconda-mode-find-definitions :async t)))
+
+(defun spacemacs//python-setup-anaconda-company ()
+  "Setup anaconda auto-completion."
+  (spacemacs|add-company-backends
+    :backends company-anaconda
+    :modes python-mode
+    :append-hooks nil
+    :call-hooks t)
+  (company-mode))
+
+(defun spacemacs//python-setup-anaconda-eldoc ()
+  "Setup anaconda eldoc."
+  (eldoc-mode)
+  (when (configuration-layer/package-used-p 'anaconda-mode)
+    (anaconda-eldoc-mode)))
+
+(defun spacemacs/anaconda-view-forward-and-push ()
+  "Find next button and hit RET"
+  (interactive)
+  (forward-button 1)
+  (call-interactively #'push-button))
+
+(defun spacemacs//disable-semantic-idle-summary-mode ()
+  "Disable semantic-idle-summary in Python mode.
+Anaconda provides more useful information but can not do it properly
+when this mode is enabled since the minibuffer is cleared all the time."
+  (semantic-idle-summary-mode 0))
+
+
+;; lsp
+
+(defun spacemacs//python-setup-lsp ()
+  "Setup lsp backend."
+  (if (configuration-layer/layer-used-p 'lsp)
+      (progn
+        (require 'lsp-python)
+        (lsp-python-enable))
+    (message "`lsp' layer is not installed, please add `lsp' layer to your dotfile.")))
+
+(defun spacemacs//python-setup-lsp-company ()
+  "Setup lsp auto-completion."
+  (if (configuration-layer/layer-used-p 'lsp)
+      (progn
+        (spacemacs|add-company-backends
+          :backends company-lsp
+          :modes python-mode
+          :append-hooks nil
+          :call-hooks t)
+        (company-mode))
+    (message "`lsp' layer is not installed, please add `lsp' layer to your dotfile.")))
+
+
+;; others
+
 (defun spacemacs//python-default ()
   "Defaut settings for python buffers"
   (setq mode-name "Python"
@@ -28,7 +108,8 @@
   "Highlight break point lines."
   (interactive)
   (highlight-lines-matching-regexp "import \\(pdb\\|ipdb\\|pudb\\|wdb\\)")
-  (highlight-lines-matching-regexp "\\(pdb\\|ipdb\\|pudb\\|wdb\\).set_trace()"))
+  (highlight-lines-matching-regexp "\\(pdb\\|ipdb\\|pudb\\|wdb\\).set_trace()")
+  (highlight-lines-matching-regexp "trepan.api.debug()"))
 
 (defun spacemacs/pyenv-executable-find (command)
   "Find executable taking pyenv shims into account.
@@ -54,10 +135,6 @@ as the pyenv version then also return nil. This works around https://github.com/
       (setq python-shell-interpreter-args "-i")
       (setq python-shell-interpreter "python"))))
 
-(defun spacemacs//python-setup-hy (&rest args)
-  (setq hy-mode-inferior-lisp-command
-        (concat (or (spacemacs/pyenv-executable-find "hy") "hy")
-                " --spy")))
 
 (defun spacemacs//python-setup-checkers (&rest args)
   (when (fboundp 'flycheck-set-checker-executable)
@@ -70,13 +147,13 @@ as the pyenv version then also return nil. This works around https://github.com/
 
 (defun spacemacs/python-setup-everything (&rest args)
   (apply 'spacemacs//python-setup-shell args)
-  (apply 'spacemacs//python-setup-hy args)
   (apply 'spacemacs//python-setup-checkers args))
 
 (defun spacemacs/python-toggle-breakpoint ()
   "Add a break point, highlight it."
   (interactive)
-  (let ((trace (cond ((spacemacs/pyenv-executable-find "wdb") "import wdb; wdb.set_trace()")
+  (let ((trace (cond ((spacemacs/pyenv-executable-find "trepan3k") "import trepan.api; trepan.api.debug()")
+                     ((spacemacs/pyenv-executable-find "wdb") "import wdb; wdb.set_trace()")
                      ((spacemacs/pyenv-executable-find "ipdb") "import ipdb; ipdb.set_trace()")
                      ((spacemacs/pyenv-executable-find "pudb") "import pudb; pudb.set_trace()")
                      ((spacemacs/pyenv-executable-find "ipdb3") "import ipdb; ipdb.set_trace()")
@@ -138,12 +215,6 @@ as the pyenv version then also return nil. This works around https://github.com/
 
 ;; Tests
 
-(defun spacemacs//disable-semantic-idle-summary-mode ()
-  "Disable semantic-idle-summary in Python mode.
-Anaconda provides more useful information but can not do it properly
-when this mode is enabled since the minibuffer is cleared all the time."
-  (semantic-idle-summary-mode 0))
-
 (defun spacemacs//python-imenu-create-index-use-semantic-maybe ()
   "Use semantic if the layer is enabled."
   (setq imenu-create-index-function 'spacemacs/python-imenu-create-index))
@@ -180,6 +251,11 @@ to be called for each testrunner. "
         (funcall (cdr (assoc test-runner funcalist)))
       (user-error "This test function is not available with the `%S' runner."
                   test-runner))))
+
+(defun spacemacs/python-test-last (arg)
+  "Re-run the last test command"
+  (interactive "P")
+  (spacemacs//python-call-correct-test-function arg '((nose . nosetests-again))))
 
 (defun spacemacs/python-test-all (arg)
   "Run all tests."
@@ -237,6 +313,7 @@ to be called for each testrunner. "
     "ta" 'spacemacs/python-test-all
     "tB" 'spacemacs/python-test-pdb-module
     "tb" 'spacemacs/python-test-module
+    "tl" 'spacemacs/python-test-last
     "tT" 'spacemacs/python-test-pdb-one
     "tt" 'spacemacs/python-test-one
     "tM" 'spacemacs/python-test-pdb-module
@@ -250,14 +327,6 @@ to be called for each testrunner. "
   (when (and python-sort-imports-on-save
              (derived-mode-p 'python-mode))
     (py-isort-before-save)))
-
-
-;;* Anaconda
-(defun spacemacs/anaconda-view-forward-and-push ()
-  "Find next button and hit RET"
-  (interactive)
-  (forward-button 1)
-  (call-interactively #'push-button))
 
 
 ;; REPL
@@ -335,12 +404,3 @@ to be called for each testrunner. "
 (when (version< emacs-version "25")
   (advice-add 'wisent-python-default-setup :after
               #'spacemacs//python-imenu-create-index-use-semantic-maybe))
-
-
-;; Eldoc
-
-(defun spacemacs//init-eldoc-python-mode ()
-  "Initialize elddoc for python buffers"
-  (eldoc-mode)
-  (when (configuration-layer/package-used-p 'anaconda-mode)
-    (anaconda-eldoc-mode)))

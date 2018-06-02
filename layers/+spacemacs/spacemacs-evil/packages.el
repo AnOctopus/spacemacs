@@ -14,7 +14,9 @@
         evil-args
         evil-cleverparens
         evil-ediff
+        evil-escape
         evil-exchange
+        evil-goggles
         evil-iedit-state
         evil-indent-plus
         evil-lion
@@ -34,8 +36,9 @@
         evil-tutor
         (evil-unimpaired :location (recipe :fetcher local))
         evil-visual-mark-mode
+        evil-visualstar
         (hs-minor-mode :location built-in)
-        linum-relative
+        (linum-relative :toggle (version< emacs-version "26"))
         vi-tilde-fringe
         ))
 
@@ -92,9 +95,26 @@
     :after (ediff)
     :if (memq dotspacemacs-editing-style '(hybrid vim))))
 
+(defun spacemacs-evil/init-evil-escape ()
+  (use-package evil-escape
+    :init
+    (progn
+      (add-hook 'spacemacs-editing-style-hook #'spacemacs//evil-escape-deactivate-in-holy-mode)
+      ;; apply once when emacs starts
+      (spacemacs//evil-escape-deactivate-in-holy-mode dotspacemacs-editing-style))
+    :config (spacemacs|hide-lighter evil-escape-mode)))
+
 (defun spacemacs-evil/init-evil-exchange ()
   (use-package evil-exchange
     :init (evil-exchange-install)))
+
+(defun spacemacs-evil/init-evil-goggles ()
+  (use-package evil-goggles
+    :init
+    (progn
+      (setq evil-goggles-async-duration 0.2
+            evil-goggles-blocking-duration 0.12)
+      (evil-goggles-mode))))
 
 (defun spacemacs-evil/init-evil-iedit-state ()
   (use-package evil-iedit-state
@@ -285,6 +305,17 @@
       :documentation "Enable evil visual marks mode."
       :evil-leader "t`")))
 
+(defun spacemacs-evil/init-evil-visualstar ()
+  (use-package evil-visualstar
+    :commands (evil-visualstar/begin-search-forward
+               evil-visualstar/begin-search-backward)
+    :init
+    (progn
+      (define-key evil-visual-state-map (kbd "*")
+        'evil-visualstar/begin-search-forward)
+      (define-key evil-visual-state-map (kbd "#")
+        'evil-visualstar/begin-search-backward))))
+
 (defun spacemacs-evil/init-hs-minor-mode ()
   (add-hook 'prog-mode-hook 'spacemacs//enable-hs-minor-mode))
 
@@ -293,10 +324,7 @@
     :commands (linum-relative-toggle linum-relative-on)
     :init
     (progn
-      (when (or (eq dotspacemacs-line-numbers 'relative)
-                (and (listp dotspacemacs-line-numbers)
-                     (car (spacemacs/mplist-get dotspacemacs-line-numbers
-                                                :relative))))
+      (when (spacemacs/relative-line-numbers-p)
         (add-hook 'spacemacs-post-user-config-hook 'linum-relative-on))
       (spacemacs/set-leader-keys "tr" 'spacemacs/linum-relative-toggle))
     :config

@@ -20,6 +20,7 @@
     evil-cleverparens
     evil-escape
     evil-evilified-state
+    evil-magit
     evil-surround
     eyebrowse
     flycheck
@@ -237,6 +238,24 @@
       "k"
       "l")))
 
+(defun keyboard-layout/pre-init-evil-magit ()
+  (kl|config evil-magit
+    :description
+    "Remap `evil-magit' bindings."
+    :loader
+    (with-eval-after-load 'evil-magit BODY)
+    :common
+    (dolist (state (if evil-magit-use-y-for-yank
+                       (list evil-magit-state 'visual)
+                     (list evil-magit-state)))
+      (kl/evil-correct-keys state magit-mode-map
+        "j"
+        "k"
+        "C-j"
+        "C-k"))
+    (kl/evil-correct-keys 'normal evil-magit-toggle-text-minor-mode-map
+      "C-j")))
+
 (defun keyboard-layout/pre-init-evil-surround ()
   (kl|config evil-surround
     :description
@@ -406,10 +425,9 @@
       (magit-change-popup-key 'magit-dispatch-popup :actions ?s ?k)
       (magit-change-popup-key 'magit-dispatch-popup :actions ?S ?K))
     :colemak-jkhl
-    (progn
-      (kl/evil-correct-keys 'visual magit-mode-map
-        "j"
-        "k"))))
+    (kl/evil-correct-keys 'visual magit-mode-map
+      "j"
+      "k")))
 
 (defun keyboard-layout/pre-init-mu4e ()
   (kl|config mu4e

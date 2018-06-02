@@ -249,7 +249,10 @@ the following snippet. Note that this may have unintended consequences until
 #+BEGIN_SRC emacs-lisp
   (with-eval-after-load 'org-agenda
     (require 'org-projectile)
-    (push (org-projectile-todo-files) org-agenda-files))
+    (mapcar '(lambda (file)
+                   (when (file-exists-p file)
+                     (push file org-agenda-files)))
+            (org-projectile-todo-files)))
 #+END_SRC
 
 ** Org-brain support
@@ -269,28 +272,32 @@ To permanently enable mode line display of org clock, add this snippet to your
 * Key bindings
 ** Starting org-mode
 
-| Key Binding   | Description                    |
-|---------------+--------------------------------|
-| ~SPC a o #~   | org agenda list stuck projects |
-| ~SPC a o /~   | org occur in agenda files      |
-| ~SPC a o a~   | org agenda list                |
-| ~SPC a o c~   | org capture                    |
-| ~SPC a o e~   | org store agenda views         |
-| ~SPC a o k i~ | org clock in last              |
-| ~SPC a o k j~ | org jump to current clock      |
-| ~SPC a o k o~ | org clock out                  |
-| ~SPC a o k r~ | org resolve clocks             |
-| ~SPC a o l~   | org store link                 |
-| ~SPC a o m~   | org tags view                  |
-| ~SPC a o o~   | org agenda                     |
-| ~SPC a o s~   | org search view                |
-| ~SPC a o t~   | org todo list                  |
-| ~SPC C c~     | org-capture                    |
+| Key Binding   | Description                                                               |
+|---------------+---------------------------------------------------------------------------|
+| ~SPC a o #~   | org agenda list stuck projects                                            |
+| ~SPC a o /~   | org occur in agenda files                                                 |
+| ~SPC a o a~   | org agenda list                                                           |
+| ~SPC a o c~   | org capture                                                               |
+| ~SPC a o e~   | org store agenda views                                                    |
+| ~SPC a o f i~ | org feed goto inbox                                                       |
+| ~SPC a o f u~ | org feed update all                                                       |
+| ~SPC a o k g~ | org goto last clocked-in clock (go to specific recent clock with ~SPC u~) |
+| ~SPC a o k i~ | org clock in last                                                         |
+| ~SPC a o k j~ | org jump to current clock                                                 |
+| ~SPC a o k o~ | org clock out                                                             |
+| ~SPC a o k r~ | org resolve clocks                                                        |
+| ~SPC a o l~   | org store link                                                            |
+| ~SPC a o m~   | org tags view                                                             |
+| ~SPC a o o~   | org agenda                                                                |
+| ~SPC a o s~   | org search view                                                           |
+| ~SPC a o t~   | org todo list                                                             |
+| ~SPC C c~     | org-capture                                                               |
 
 ** Toggles
 
 | Key Binding | Description                                   |
 |-------------+-----------------------------------------------|
+| ~SPC m T c~ | org-toggle-checkbox                           |
 | ~SPC m T e~ | org-toggle-pretty-entities                    |
 | ~SPC m T i~ | org-toggle-inline-images                      |
 | ~SPC m T l~ | org-toggle-link-display                       |
@@ -322,6 +329,8 @@ To permanently enable mode line display of org clock, add this snippet to your
 | ~SPC m d T~                                  | org-time-stamp-inactive                      |
 | ~SPC m e e~                                  | org-export-dispatch                          |
 | ~SPC m e m~                                  | send current buffer as HTML email message    |
+| ~SPC m f i~                                  | org-feed-goto-inbox                          |
+| ~SPC m f u~                                  | org-feed-update-all                          |
 | ~SPC m l~                                    | org-open-at-point                            |
 | ~SPC m L~                                    | org-shiftright                               |
 | ~SPC m H~                                    | org-shiftleft                                |
@@ -432,6 +441,7 @@ are also available.
 | ~SPC m i h~   | org-insert-heading               |
 | ~SPC m i K~   | spacemacs/insert-keybinding-org  |
 | ~SPC m i l~   | org-insert-link                  |
+| ~SPC m i n~   | org-add-note                     |
 | ~SPC m i p~   | org-set-property                 |
 | ~SPC m i s~   | org-insert-subheading            |
 | ~SPC m i t~   | org-set-tags                     |
@@ -698,3 +708,4 @@ are available.
 | ~o~         | Open and edit the visualized entry    |
 | ~f~         | Find/visit another entry to visualize |
 | ~r~         | Rename this, or another, entry        |
+|             |                                       |

@@ -93,10 +93,11 @@
 
 (defun org/init-org ()
   (use-package org
-    :defer t
+    :defer (spacemacs/defer)
     :commands (orgtbl-mode)
     :init
     (progn
+      (spacemacs|require 'org)
       (setq org-clock-persist-file (concat spacemacs-cache-directory
                                            "org-clock-save.el")
             org-id-locations-file (concat spacemacs-cache-directory
@@ -158,10 +159,11 @@ Will work on both org-mode and any mode that accepts plain html."
             (forward-char -8))))
 
       (dolist (prefix '(
+                        ("mb" . "babel")
                         ("mC" . "clocks")
                         ("md" . "dates")
                         ("me" . "export")
-                        ("mh" . "headings")
+                        ("mf" . "feeds")
                         ("mi" . "insert")
                         ("miD" . "download")
                         ("ms" . "trees/subtrees")
@@ -171,7 +173,6 @@ Will work on both org-mode and any mode that accepts plain html."
                         ("mti" . "insert")
                         ("mtt" . "toggle")
                         ("mx" . "text")
-                        ("mb" . "src-blocks/babel")
                         ))
         (spacemacs/declare-prefix-for-mode 'org-mode (car prefix) (cdr prefix)))
       (spacemacs/set-leader-keys-for-major-mode 'org-mode
@@ -186,9 +187,12 @@ Will work on both org-mode and any mode that accepts plain html."
         "dt" 'org-time-stamp
         "dT" 'org-time-stamp-inactive
         "ee" 'org-export-dispatch
+        "fi" 'org-feed-goto-inbox
+        "fu" 'org-feed-update-all
 
         "a" 'org-agenda
 
+        "Tc" 'org-toggle-checkbox
         "Te" 'org-toggle-pretty-entities
         "Ti" 'org-toggle-inline-images
         "Tl" 'org-toggle-link-display
@@ -292,6 +296,7 @@ Will work on both org-mode and any mode that accepts plain html."
         "iH" 'org-insert-heading-after-current
         "iK" 'spacemacs/insert-keybinding-org
         "il" 'org-insert-link
+        "in" 'org-add-note
         "ip" 'org-set-property
         "is" 'org-insert-subheading
         "it" 'org-set-tags
@@ -308,6 +313,7 @@ Will work on both org-mode and any mode that accepts plain html."
       ;; Add global evil-leader mappings. Used to access org-agenda
       ;; functionalities – and a few others commands – from any other mode.
       (spacemacs/declare-prefix "ao" "org")
+      (spacemacs/declare-prefix "aof" "feeds")
       (spacemacs/declare-prefix "aok" "clock")
       (spacemacs/set-leader-keys
         ;; org-agenda
@@ -316,6 +322,9 @@ Will work on both org-mode and any mode that accepts plain html."
         "aoa" 'org-agenda-list
         "aoc" 'org-capture
         "aoe" 'org-store-agenda-views
+        "aofi" 'org-feed-goto-inbox
+        "aofu" 'org-feed-update-all
+        "aokg" 'org-clock-goto
         "aoki" 'org-clock-in-last
         "aokj" 'org-clock-jump-to-current-clock
         "aoko" 'org-clock-out

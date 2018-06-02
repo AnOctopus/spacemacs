@@ -11,8 +11,9 @@
 
 (setq spacemacs-navigation-packages
       '(ace-link
+        ace-window
         auto-highlight-symbol
-        (centered-cursor :location local)
+        centered-cursor-mode
         (compile :location built-in)
         (doc-view :location built-in)
         flx-ido
@@ -39,6 +40,21 @@
         (define-key eww-link-keymap "o" 'ace-link-eww)
         (define-key eww-mode-map "o" 'ace-link-eww)))))
 
+(defun spacemacs-navigation/init-ace-window ()
+  (use-package ace-window
+    :defer t
+    :init
+    (progn
+      (spacemacs/set-leader-keys
+        "bD" 'spacemacs/ace-kill-this-buffer
+        ;; FIXME: Needs new binding.
+        ;; "wC" 'spacemacs/ace-center-window
+        "wD" 'spacemacs/ace-delete-window
+        "wM" 'ace-swap-window
+        "wW" 'ace-window)
+      ;; set ace-window keys to home-row
+      (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))))
+
 (defun spacemacs-navigation/init-auto-highlight-symbol ()
   (use-package auto-highlight-symbol
     :defer t
@@ -51,10 +67,10 @@
             ahs-idle-timer 0
             ahs-idle-interval 0.25
             ahs-inhibit-face-list nil
-            spacemacs--symbol-highlight-transient-state-doc
-            "
- %s  [_n_] next   [_N_/_p_] previous   [_r_] change range   [_R_] reset   [_e_] iedit
- %s  [_d_/_D_] next/previous definition")
+            spacemacs--symbol-highlight-transient-state-doc "
+ %s
+ [_n_] next   [_N_/_p_] prev  [_d_/_D_] next/prev def  [_r_] range  [_R_] reset
+ [_e_] iedit")
 
       ;; since we are creating our own maps,
       ;; prevent the default keymap from getting created
@@ -109,8 +125,9 @@
       ;; transient state
       (spacemacs|define-transient-state symbol-highlight
         :title "Symbol Highlight Transient State"
+        :hint-is-doc t
         :dynamic-hint (spacemacs//symbol-highlight-ts-doc)
-        :before-exit (spacemacs//ahs-ms-on-exit)
+        :before-exit (spacemacs//ahs-ts-on-exit)
         :bindings
         ("d" ahs-forward-definition)
         ("D" ahs-backward-definition)
@@ -122,7 +139,7 @@
         ("r" ahs-change-range)
         ("q" nil :exit t)))))
 
-(defun spacemacs-navigation/init-centered-cursor ()
+(defun spacemacs-navigation/init-centered-cursor-mode ()
   (use-package centered-cursor-mode
     :commands (centered-cursor-mode
                global-centered-cursor-mode)
@@ -259,6 +276,8 @@
                    evil-window-move-far-left
                    evil-window-move-far-right
                    evil-window-move-very-bottom
+                   next-multiframe-window
+                   previous-multiframe-window
                    quit-window
                    winum-select-window-0-or-10
                    winum-select-window-1

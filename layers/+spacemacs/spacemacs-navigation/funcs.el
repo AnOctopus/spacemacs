@@ -10,6 +10,34 @@
 ;;; License: GPLv3
 
 
+;; ace-window
+
+(defun spacemacs/ace-delete-window (&optional arg)
+  "Ace delete window.
+If the universal prefix argument is used then kill the buffer too."
+  (interactive "P")
+  (require 'ace-window)
+  (aw-select
+   " Ace - Delete Window"
+   (lambda (window)
+     (when (equal '(4) arg)
+       (with-selected-window window
+         (spacemacs/kill-this-buffer arg)))
+     (aw-delete-window window))))
+
+(defun spacemacs/ace-kill-this-buffer (&optional arg)
+  "Ace kill visible buffer in a window.
+If the universal prefix argument is used then kill also the window."
+  (interactive "P")
+  (require 'ace-window)
+  (let (golden-ratio-mode)
+    (aw-select
+     " Ace - Kill buffer in Window"
+     (lambda (window)
+       (with-selected-window window
+         (spacemacs/kill-this-buffer arg))))))
+
+
 ;; auto-highlight symbol
 
 (defun spacemacs/goto-last-searched-ahs-symbol ()
@@ -111,7 +139,7 @@
   (spacemacs/symbol-highlight-transient-state/body)
   (spacemacs/integrate-evil-search nil))
 
-(defun spacemacs//ahs-ms-on-exit ()
+(defun spacemacs//ahs-ts-on-exit ()
   ;; Restore user search direction state as ahs has exitted in a state
   ;; good for <C-s>, but not for 'n' and 'N'"
   (setq isearch-forward spacemacs--ahs-searching-forward))
@@ -166,8 +194,7 @@
   (spacemacs//transient-state-make-doc
    'symbol-highlight
    (format spacemacs--symbol-highlight-transient-state-doc
-           (spacemacs//symbol-highlight-doc)
-           (make-string (length (spacemacs//symbol-highlight-doc)) 32))))
+           (spacemacs//symbol-highlight-doc))))
 
 
 ;; golden ratio

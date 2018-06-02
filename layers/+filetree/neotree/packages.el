@@ -34,6 +34,9 @@
             neo-modern-sidebar t
             neo-vc-integration nil)
 
+      (when (eq 'darwin system-type)
+       (setq neo-default-system-application "open"))
+
       (spacemacs|define-transient-state neotree
         :title "NeoTree Key Hints"
         :doc "
@@ -51,7 +54,7 @@ Navigation^^^^             Actions^^         Visual actions/config^^^
 [_RET_] open               ^^^^              [_?_]   close hints
 "
         :bindings
-        ("RET" neotree-enter)
+        ("RET" spacemacs/neotree-expand-or-open)
         ("TAB" neotree-stretch-toggle)
         ("|" neotree-enter-vertical-split)
         ("-" neotree-enter-horizontal-split)
@@ -79,7 +82,7 @@ Navigation^^^^             Actions^^         Visual actions/config^^^
           :mode neotree-mode
           :bindings
           (kbd "TAB")  'neotree-stretch-toggle
-          (kbd "RET") 'neotree-enter
+          (kbd "RET") 'spacemacs/neotree-expand-or-open
           (kbd "|") 'neotree-enter-vertical-split
           (kbd "-") 'neotree-enter-horizontal-split
           (kbd "'") 'neotree-quick-look
@@ -103,16 +106,17 @@ Navigation^^^^             Actions^^         Visual actions/config^^^
 
       (spacemacs/set-leader-keys
         "ft" 'neotree-toggle
+        "fT" 'neotree-show
         "pt" 'neotree-find-project-root))
     :config
-    (spacemacs//neotree-key-bindings)))
+    (progn
+      (spacemacs//neotree-key-bindings)
+      (add-to-list 'spacemacs-window-split-ignore-prefixes neo-buffer-name))))
 
 (defun neotree/pre-init-winum ()
   (spacemacs|use-package-add-hook winum
     :post-config
-    (add-to-list 'winum-assign-functions #'spacemacs//winum-neotree-assign-func)))
-
-(defun neotree/post-init-winum ()
-  (spacemacs/set-leader-keys
     ;; window 0 is reserved for file trees
-    "0" 'neotree-show))
+    (spacemacs/set-leader-keys "0" #'neotree-show)
+    (define-key winum-keymap (kbd "M-0") #'neotree-show)
+    (add-to-list 'winum-assign-functions #'spacemacs//winum-neotree-assign-func)))

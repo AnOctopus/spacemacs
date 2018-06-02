@@ -924,7 +924,7 @@
         (mocker-mock-default-record-cls 'mocker-stub-record))
     (mocker-let
      ((file-exists-p (f) ((:output t :occur 2)))
-      (load (f) ((:output nil :occur 1))))
+      (load (f &optional noerr nomsg) ((:output nil :occur 1))))
      (should (equal (cfgl-layer "layer"
                                 :name 'layer
                                 :disabled-for nil
@@ -943,7 +943,7 @@
         (mocker-mock-default-record-cls 'mocker-stub-record))
     (mocker-let
      ((file-exists-p (f) ((:output t :occur 2)))
-      (load (f) ((:output nil :occur 1))))
+      (load (f &optional noerr nomsg) ((:output nil :occur 1))))
      (should (equal (cfgl-layer "layer"
                                 :name 'layer
                                 :disabled-for nil
@@ -976,7 +976,7 @@
         (mocker-mock-default-record-cls 'mocker-stub-record))
     (mocker-let
      ((file-exists-p (f) ((:output t :occur 2)))
-      (load (f) ((:output nil :occur 1))))
+      (load (f &optional noerr nomsg) ((:output nil :occur 1))))
      (should (equal (cfgl-layer "layer"
                                 :name 'layer
                                 :disabled-for '(pkg8 pkg9)
@@ -1019,7 +1019,7 @@
         (mocker-mock-default-record-cls 'mocker-stub-record))
     (mocker-let
      ((file-exists-p (f) ((:output t :occur 2)))
-      (load (f) ((:output nil :occur 1))))
+      (load (f &optional noerr nomsg) ((:output nil :occur 1))))
      (should (equal (cfgl-layer "layer"
                                 :name 'layer
                                 :disabled-for '(pkg8 pkg9)
@@ -1151,47 +1151,55 @@
 ;; ---------------------------------------------------------------------------
 
 (ert-deftest test-set-layers-variables--none ()
-  (let ((input `(,(cfgl-layer "layer"
-                              :name 'layer
-                              :dir "/a/path/")))
+  (let ((configuration-layer--indexed-layers (make-hash-table :size 1024))
         (var 'foo))
-    (configuration-layer//set-layers-variables input)
+    (helper--add-layers
+     `(,(cfgl-layer "layer"
+                    :name 'layer
+                    :dir "/a/path/")))
+    (configuration-layer//set-layers-variables '(layer))
     (should (eq var 'foo))))
 
 (ert-deftest test-set-layers-variables--one-value ()
-  (let ((input `(,(cfgl-layer "layer"
-                              :name 'layer
-                              :dir "/a/path/"
-                              :variables '(var1 'bar)))))
+  (let ((configuration-layer--indexed-layers (make-hash-table :size 1024)))
+    (helper--add-layers
+     `(,(cfgl-layer "layer"
+                    :name 'layer
+                    :dir "/a/path/"
+                    :variables '(var1 'bar))))
     (setq var1 'foo)
-    (configuration-layer//set-layers-variables input)
+    (configuration-layer//set-layers-variables '(layer))
     (should (eq var1 'bar))))
 
 (ert-deftest test-set-layers-variables--multiple-values ()
-  (let ((input `(,(cfgl-layer "layer"
-                              :name 'layer
-                              :dir "/a/path/"
-                              :variables '(var1 'bar1 var2 'bar2 var3 'bar3)))))
+  (let ((configuration-layer--indexed-layers (make-hash-table :size 1024)))
+    (helper--add-layers
+     `(,(cfgl-layer "layer"
+                    :name 'layer
+                    :dir "/a/path/"
+                    :variables '(var1 'bar1 var2 'bar2 var3 'bar3))))
     (setq var1 'foo)
     (setq var2 'foo)
     (setq var3 'foo)
-    (configuration-layer//set-layers-variables input)
+    (configuration-layer//set-layers-variables '(layer))
     (should (eq var1 'bar1))
     (should (eq var2 'bar2))
     (should (eq var3 'bar3))))
 
 (ert-deftest test-set-layers-variables--odd-number-of-values ()
-  (let ((input `(,(cfgl-layer "layer"
-                              :name 'layer
-                              :dir "/a/path/"
-                              :variables '(var1 'bar var2)))))
+  (let ((configuration-layer--indexed-layers (make-hash-table :size 1024)))
+    (helper--add-layers
+     `(,(cfgl-layer "layer"
+                    :name 'layer
+                    :dir "/a/path/"
+                    :variables '(var1 'bar var2))))
     (mocker-let
      ((configuration-layer//warning
        (msg &rest args)
        ((:record-cls 'mocker-stub-record :output nil :occur 1))))
      (setq var1 'foo)
      (setq var2 'foo)
-     (configuration-layer//set-layers-variables input)
+     (configuration-layer//set-layers-variables '(layer))
      (should (eq var1 'bar))
      (should (eq var2 'foo)))))
 

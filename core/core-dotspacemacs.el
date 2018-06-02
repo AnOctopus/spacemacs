@@ -55,6 +55,27 @@ exists. Otherwise, fallback to ~/.spacemacs"))
 `+distributions'. For now available distributions are `spacemacs-base'
 or `spacemacs'.")
 
+(defvar dotspacemacs-enable-emacs-pdumper nil
+  "If non-nil then enable support for the portable dumper. You'll need
+to compile Emacs 27 from source following the instructions in file
+EXPERIMENTAL.org at to root of the git repository.")
+
+(defvar dotspacemacs-emacs-pdumper-executable-file "emacs-27.0.50"
+  "File path pointing to emacs 27.1 executable compiled with support for the
+portable dumper (this is currently the branch pdumper.")
+
+(defvar dotspacemacs-emacs-dumper-dump-file "spacemacs.pdmp"
+  "Name of the Spacemacs dump file. This is the file will be created by the
+portable dumper in the cache directory under dumps sub-directory.
+To load it when starting Emacs add the parameter `--dump-file'
+when invoking Emacs 27.1 executable on the command line, for instance:
+./emacs --dump-file=/Users/sylvain/.emacs.d/.cache/dumps/spacemacs.pdmp")
+
+(defvar dotspacemacs-gc-cons '(100000000 0.1)
+  "Set `gc-cons-threshold' and `gc-cons-percentage' when startup finishes.
+This is an advanced option and should not be changed unless you suspect
+performance issues due to garbage collection operations.")
+
 (defvar dotspacemacs-elpa-https t
   "If non nil ELPA repositories are contacted via HTTPS whenever it's
 possible. Set it to nil if you have no way to use HTTPS in your
@@ -65,7 +86,7 @@ environment, otherwise it is strongly recommended to let it set to t.")
 
 (defvar dotspacemacs-use-spacelpa nil
   "If non-nil then Spacelpa repository is the primary source to install
-a locked version of packages. If nil then Spacemacs will install the lastest
+a locked version of packages. If nil then Spacemacs will install the latest
 version of packages from MELPA.")
 
 (defvar dotspacemacs-verify-spacelpa-archives nil
@@ -332,6 +353,9 @@ This variable can also be set to a property list for finer control:
 The property `:enabled-for-modes' takes priority over `:disabled-for-modes' and
 restricts line-number to the specified list of major-mode.")
 
+(defvar dotspacemacs-enable-server nil
+  "If non-nil, start an Emacs server if one is not already running.")
+
 (defvar dotspacemacs-persistent-server nil
   "If non nil advises quit functions to keep server open when quitting.")
 
@@ -361,11 +385,6 @@ whitespace for changed lines or `nil' to disable cleanup.")
 (defvar dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
   "List of search tool executable names. Spacemacs uses the first installed
 tool of the list. Supported tools are `rg', `ag', `pt', `ack' and `grep'.")
-
-(defvar dotspacemacs-default-package-repository 'melpa-stable
-  "The default package repository used if no explicit repository has been
-specified with an installed package.
-NOT USED FOR NOW :-)")
 
 (defvar dotspacemacs-startup-lists '((recents  . 5)
                                     (projects . 7))
@@ -493,7 +512,9 @@ Called with `C-u C-u' skips `dotspacemacs/user-config' _and_ preleminary tests."
                 (setq dotspacemacs-editing-style
                       (dotspacemacs//read-editing-style-config
                        dotspacemacs-editing-style))
-                (configuration-layer/load)
+                ;; try to force a redump when reloading the configuration
+                (let ((spacemacs-force-dump t))
+                  (configuration-layer/load))
                 (if (member arg '((4) (16)))
                     (message (concat "Done (`dotspacemacs/user-config' "
                                      "function has been skipped)."))

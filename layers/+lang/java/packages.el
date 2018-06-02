@@ -29,6 +29,7 @@
         maven-test-mode
         (meghanada :toggle (not (version< emacs-version "25.1")))
         mvn
+        org
         ))
 
 (defun java/post-init-company ()
@@ -82,7 +83,7 @@
         "Dk" 'stop-eclimd
         "Ds" 'start-eclimd
         ;; errors (problems)
-        "ee" 'eclim-problems-correct
+        "Ee" 'eclim-problems-correct
         ;; find
         "ff" 'eclim-java-find-generic
         ;; goto
@@ -177,7 +178,7 @@
                           ("mc" . "check")
                           ("md" . "debug")
                           ("mD" . "daemon")
-                          ("me" . "errors")
+                          ("mE" . "errors")
                           ("mg" . "goto")
                           ("mh" . "docs")
                           ("mi" . "inspect")
@@ -216,9 +217,9 @@
           "Dr"     'spacemacs/ensime-gen-and-restart
           "Ds"     'ensime
 
-          "ee"     'ensime-print-errors-at-point
-          "el"     'ensime-show-all-errors-and-warnings
-          "es"     'ensime-stacktrace-switch
+          "Ee"     'ensime-print-errors-at-point
+          "El"     'ensime-show-all-errors-and-warnings
+          "Es"     'ensime-stacktrace-switch
 
           "gp"     'ensime-pop-find-definition-stack
           "gi"     'ensime-goto-impl
@@ -348,6 +349,10 @@
 
 (defun java/post-init-helm-gtags ()
   (spacemacs/helm-gtags-define-keys-for-mode 'java-mode))
+
+(defun java/pre-init-org ()
+  (spacemacs|use-package-add-hook org
+    :post-config (add-to-list 'org-babel-load-languages '(java . t))))
 
 (defun java/init-java-mode ()
   (use-package java-mode
