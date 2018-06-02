@@ -370,6 +370,7 @@
     (spacemacs|use-package-add-hook magit :post-config BODY)
     :common
     (progn
+      (require 'evil-magit)
       (dolist (state (if evil-magit-use-y-for-yank
                          (list evil-magit-state 'visual)
                        (list evil-magit-state)))

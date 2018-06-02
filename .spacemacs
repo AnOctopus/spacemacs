@@ -46,26 +46,31 @@ values."
      fasd
      git
      graphviz
-     haskell
+      (haskell :variables
+        haskell-completion-backend 'intero)
      java
      latex
      markdown
      (mu4e :variables
-           mu4e-enable-notifications t
+           ;; mu4e-enable-notifications t
            mu4e-enable-mode-line t
-           mu4e-get-mail-command "mbsync -a"
+           mu4e-use-maildirs-extension t
            mu4e-maildir "~/maildir"
-           mu4e-account-alist t
-
-           mu4e-context-policy 'pick-first)
+           mu4e-get-mail-command "mbsync -a"
+           mu4e-update-interval 300
+       mu4e-context-policy 'pick-first
+       message-send-mail-function 'message-send-mail-with-sendmail)
      nlinum
      no-dots
      (org :variables
-          org-directory "~/sync/org"
+          org-directory "~/org/agenda"
           org-log-refile 'time
-          org-agenda-files '("~/sync/org")
-          org-agenda-todo-ignore-scheduled 'all
+          org-agenda-files '("~/org/agenda")
           org-agenda-start-on-weekday nil
+       org-scheduled-past-days 0
+       org-deadline-past-days 0
+       org-agenda-todo-ignore-scheduled 0
+       org-agenda-todo-ignore-deadlines 0
           org-pomodoro-keep-killed-pomodoro-time t
           org-todo-keywords '("TODO(t)"
                               "STARTED(s)"
@@ -73,10 +78,11 @@ values."
                               "|"
                               "CANCELLED(c)"
                               "DONE(d)")
-          org-capture-templates '(("t" "Todo" entry (file+headline "notes.org" "Tasks")
+          org-capture-templates '(("t" "Todo" entry (file+headline "agenda/notes.org" "unsorted")
                                    "* TODO %?\n  %u\n  %i\n")
-                                  ("e" "Email Task" entry (file+headline "notes.org" "Tasks")
+                                  ("e" "Email Task" entry (file+headline "agenda/notes.org" "unsorted")
                                    "* TODO %?\n %a\n %u\n %i\n")))
+      racket
      react
      (scala :variables
             scala-enable-eldoc t
@@ -356,15 +362,15 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   (setq-default
-   evil-want-Y-yank-to-eol t
-   evil-move-cursor-back nil
-   nxml-child-indent 4
-   nxml-slash-auto-complete-flag t
-   )
+    evil-want-Y-yank-to-eol t
+    evil-move-cursor-back nil
+    nxml-child-indent 4
+    nxml-slash-auto-complete-flag t
+    )
   (setq
-   custom-file "~/.emacs.d/custom.el"
-   spacemacs-useful-buffers-regexp '("\\*\\(scratch\\|spacemacs\\|notmuch.*\\)\\*")
-   )
+    custom-file "~/.emacs.d/custom.el"
+    spacemacs-useful-buffers-regexp '("\\*\\(scratch\\|spacemacs\\|notmuch.*\\)\\*")
+    )
   (load custom-file)
   (define-key evil-normal-state-map (kbd "SPC #") #'server-edit)
   ;; (magit-define-popup-switch 'magit-log-popup
@@ -372,47 +378,47 @@ you should place your code here."
 
   (spacemacs/toggle-highlight-long-lines-globally-on)
   (spacemacs/toggle-truncate-lines-off)
+  (spacemacs/toggle-evil-safe-lisp-structural-editing-on-register-hooks)
   (add-hook 'org-mode-hook #'spacemacs/toggle-truncate-lines-off)
 
   (custom-set-faces '(font-lock-comment-face ((t (:foreground "deep sky blue")))))
   (spacemacs/set-leader-keys-for-major-mode 'org-agenda-mode
     "r" 'org-agenda-refile
     "e" 'org-agenda-set-effort)
-  (spacemacs/set-leader-keys
-    "aop" 'org-pomodoro)
-  (setq
-   mu4e-sent-folder "/namecheap/Sent"
-   mu4e-drafts-folder "/namecheap/Drafts"
-   mu4e-trash-folder "/namecheap/Trash"
-   )
 
-  (with-eval-after-load 'mu4e
-    (setq  mu4e-contexts
-           `(,(make-mu4e-context
-               :name "namecheap"
-               :match-func (lambda (msg)
-                             (when msg
-                               (mu4e-message-contact-field-matches msg
-                                                                   :to "amanda@amandawalker.io")))
-               :vars '((user-mail-address . "amanda@amandawalker.io")
-                       (mu4e-trash-folder . "/namecheap/Trash")
-                       (mu4e-sent-folder . "/namecheap/Sent")
-                       (mu4e-drafts-folder . "/namecheap/Drafts")
-                       ))
-             ,(make-mu4e-context
-               :name "gmail"
-               :match-func (lambda (msg)
-                             (when msg
-                               (or
-                                (mu4e-message-contact-field-matches msg
-                                                                    :to "sean.andrew.walker@gmail.com")
-                                (mu4e-message-contact-field-matches msg
-                                                                    :to "crazy.gold.shield@gmail.com"))))
-               :vars '((user-mail-address . "sean.andrew.walker@gmail.com")
-                       (mu4e-sent-messages-behavior . delete)
-                       (mu4e-sent-folder . "/gmail/[Gmail]/Sent Mail")
-                       (mu4e-drafts-folder . "/gmail/[Gmail]/Drafts")
-                       (mu4e-trash-folder . "/gmail/[Gmail]/Trash")))))
+  (setq
+    user-full-name "Amanda Walker")
+
+  (setq  mu4e-contexts
+      `(,(make-mu4e-context
+           :name "namecheap"
+           :match-func (lambda (msg)
+                         (when msg
+                           (mu4e-message-contact-field-matches msg
+                             :to "amanda@amandawalker.io")))
+           :vars '((user-mail-address . "amanda@amandawalker.io")
+                    (mu4e-sent-messages-behavior . sent)
+                    (mu4e-trash-folder . "/namecheap/Trash")
+                    (mu4e-sent-folder . "/namecheap/Sent")
+                    (mu4e-drafts-folder . "/namecheap/Drafts")
+                    (mu4e-refile-folder . "/namecheap/Archive")
+                    ))
+         ,(make-mu4e-context
+            :name "gmail"
+            :match-func (lambda (msg)
+                          (when msg
+                            (or
+                              (mu4e-message-contact-field-matches msg
+                                :to "sean.andrew.walker@gmail.com")
+                              (mu4e-message-contact-field-matches msg
+                                :to "crazy.gold.shield@gmail.com"))))
+            :vars '((user-mail-address . "sean.andrew.walker@gmail.com")
+                     (mu4e-sent-messages-behavior . delete)
+                     (mu4e-sent-folder . "/gmail/[Gmail]/Sent Mail")
+                     (mu4e-drafts-folder . "/gmail/[Gmail]/Drafts")
+                     (mu4e-trash-folder . "/gmail/[Gmail]/Trash")
+                     (mu4e-refile-folder . "/archive")
+                     )))
     )
   (with-eval-after-load 'mu4e-alert
     (mu4e-alert-set-default-style 'notifications))
