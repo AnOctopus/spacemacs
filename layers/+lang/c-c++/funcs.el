@@ -9,6 +9,10 @@
 ;;
 ;;; License: GPLv3
 
+(defun spacemacs//c-toggle-auto-newline ()
+  "Toggle auto-newline."
+  (c-toggle-auto-newline 1))
+
 
 ;; clang
 
@@ -130,15 +134,6 @@ and the arguments for flyckeck-clang based on a project-specific text file."
                           (when (string-equal major-mode "c-mode")
                             (spacemacs//c-c++-get-standard-include-paths "c"))
                           idirafter-paths)))))
-
-
-;; realgud
-
-(defun spacemacs//short-key-state (modeon)
-  "Set evil-evilified-state explicitly."
-  (if modeon
-      (evil-evilified-state)
-    (evil-normal-state)))
 
 
 ;; rtags

@@ -22,6 +22,7 @@
         ivy-hydra
         (ivy-rich :toggle ivy-enable-advanced-buffer-information)
         (ivy-spacemacs-help :location local)
+        ivy-xref
         org
         persp-mode
         projectile
@@ -36,13 +37,14 @@
     :post-init
     ;; add some functions to ahs transient states
     (setq spacemacs--symbol-highlight-transient-state-doc
-          (concat spacemacs--symbol-highlight-transient-state-doc
-                  "  [_b_] search buffers [_/_] search proj [_f_] search files [_s_] swiper"))
+          (concat
+           spacemacs--symbol-highlight-transient-state-doc
+           "  Search: [_s_] swiper  [_b_] buffers  [_f_] files  [_/_] project"))
     (spacemacs/transient-state-register-add-bindings 'symbol-highlight
-      '(("/" spacemacs/search-project-auto-region-or-symbol :exit t)
+      '(("s" spacemacs/swiper-region-or-symbol :exit t)
         ("b" spacemacs/swiper-all-region-or-symbol :exit t)
         ("f" spacemacs/search-auto-region-or-symbol :exit t)
-        ("s" spacemacs/swiper-region-or-symbol :exit t)))))
+        ("/" spacemacs/search-project-auto-region-or-symbol :exit t)))))
 
 (defun ivy/post-init-bookmark ()
   (spacemacs/set-leader-keys "fb" 'counsel-bookmark))
@@ -243,6 +245,20 @@
             "h p"   'ivy-spacemacs-help-packages
             "h r"   'ivy-spacemacs-help-docs
             "h t"   'ivy-spacemacs-help-toggles)))
+
+(defun ivy/init-ivy-xref ()
+  (use-package ivy-xref
+    :defer t
+    :init
+    (progn
+      (setq xref-prompt-for-identifier '(not xref-find-definitions
+                                             xref-find-definitions-other-window
+                                             xref-find-definitions-other-frame
+                                             xref-find-references
+                                             spacemacs/jump-to-definition))
+
+      ;; Use ivy-xref to display `xref.el' results.
+      (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))))
 
 (defun ivy/post-init-org ()
   (add-hook 'org-ctrl-c-ctrl-c-hook 'spacemacs//counsel-org-ctrl-c-ctrl-c-org-tag))

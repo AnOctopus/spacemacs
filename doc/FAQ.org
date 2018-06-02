@@ -62,7 +62,7 @@ As it is written, that is _space_ then _macs_.
 ** Why do you call this a "distribution", I don't see any "Spacemacs" executable?
 Although we could do it we don't package Emacs with Spacemacs. We allow users to
 choose whatever build of Emacs they want that works with their OS, this is more
-flexible and it saves use tons of issues. Spacemacs is more than a configuration
+flexible and it saves us tons of issues. Spacemacs is more than a configuration
 of Emacs it comes with advanced feature, concepts and tooling. Roughly, think of
 it as a Linux distribution where we would ask people to install the kernel first
 and then fetch somehow the actual code to get the distribution.
@@ -371,6 +371,8 @@ include this on your =dotspacemacs/user-config=.
 (add-hook 'ruby-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
 ;; For Javascript
 (add-hook 'js2-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
+;; For all programming modes
+(add-hook 'prog-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
 #+END_SRC
 
 ** Setup =$PATH=?
