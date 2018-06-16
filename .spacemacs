@@ -31,8 +31,6 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     (keyboard-layout :variables
-                      kl-layout 'colemak-hnei)
      auto-completion
      chrome
      clojure
