@@ -1,6 +1,6 @@
 #+TITLE: Spacemacs experimental features
 
-* Table of contents                                       :TOC_4_gh:noexport:
+* Table of Contents                     :TOC_4_gh:noexport:
 - [[#spacemacs-dumps-using-the-portable-dumper][Spacemacs dumps using the portable dumper]]
   - [[#setup][Setup]]
     - [[#emacs-plus-users][=emacs-plus= users]]
@@ -9,7 +9,9 @@
     - [[#compile-emacs-from-source][Compile Emacs from source]]
       - [[#macos][MacOS]]
       - [[#ubuntu][Ubuntu]]
+      - [[#windows][Windows]]
     - [[#install-emacs][Install Emacs]]
+      - [[#windows-1][Windows]]
     - [[#update-your-dotfile][Update your dotfile]]
     - [[#test][Test]]
     - [[#report-issues][Report issues]]
@@ -44,16 +46,23 @@ Clone Emacs from [[https://git.savannah.gnu.org/git/emacs.git]]:
   git checkout pdumper
 #+END_SRC
 
+Note: On windows make sure that autocrlf is disabled in git before cloning or
+else the =autoconf.sh= script will fail later on:
+
+#+BEGIN_SRC shell
+  git config --global core.autocrlf false
+#+END_SRC
+
 *** Simple patch of Emacs source code
 We need to increase the number of =remembered_data= slots in =src/pdumper.c=, we
 double the number of slots by replacing 32 with 64:
 
 #+BEGIN_SRC C
-static struct
-{
-  void *mem;
-  int sz;
-} remembered_data[64];
+  static struct
+  {
+    void *mem;
+    int sz;
+  } remembered_data[64];
 #+END_SRC
 
 *** Compile Emacs from source
@@ -84,13 +93,41 @@ In the root directory of your freshly cloned Emacs repository and with the
   make
 #+END_SRC
 
-If you have never compile Emacs from source on your machine then you probably
+If you have never compiled Emacs from source on your machine then you probably
 need to install the following packages:
 
 #+BEGIN_SRC shell
-   sudo apt-get install build-essential automake texinfo libjpeg-dev libncurses5-dev
-   sudo apt-get install libtiff5-dev libgif-dev libpng-dev libxpm-dev libgtk-3-dev libgnutls28-dev
+  sudo apt-get install build-essential automake texinfo libjpeg-dev libncurses5-dev
+  sudo apt-get install libtiff5-dev libgif-dev libpng-dev libxpm-dev libgtk-3-dev libgnutls28-dev
 #+END_SRC
+
+**** Windows
+/Note: This is tested on Windows 10/
+
+Install MSYS2 x86_64 from [[http://repo.msys2.org/distrib/x86_64/][here]].
+
+Run msys2_shell.bat and in the msys2 prompt run:
+
+#+BEGIN_SRC shell
+  pacman -S base-devel mingw-w64-x86_64-toolchain \
+  mingw-w64-x86_64-xpm-nox mingw-w64-x86_64-libtiff \
+  mingw-w64-x86_64-giflib mingw-w64-x86_64-jbigkit \
+  mingw-w64-x86_64-libpng mingw-w64-x86_64-libjpeg-turbo \
+  mingw-w64-x86_64-librsvg mingw-w64-x86_64-libxml2 \
+  mingw-w64-x86_64-gnutls
+#+END_SRC
+
+Quit the msys2 shell and run mingw64.exe in the msys64 install directory. In the
+mingw prompt navigate to the emacs source checkout (=cd /c/= will get you to the
+root of the c drive) and run:
+
+#+BEGIN_SRC shell
+  ./autogen.sh
+  ./configure --without-ns --without-dbus --with-gnutls --with-imagemagick --with-rsvg  --with-mailutils --with-xml2 --with-modules
+  make
+#+END_SRC
+
+Instructions from [[https://sourceforge.net/p/emacsbinw64/wiki/Build%20guideline%20for%20MSYS2-MinGW-w64%20system/][here]].
 
 *** Install Emacs
 After the compiliation finished successfully, you may need to install Emacs.
@@ -100,51 +137,72 @@ After the compiliation finished successfully, you may need to install Emacs.
   sudo make install  # if globally
 #+END_SRC
 
+**** Windows
+In the mingw shell run:
+
+#+BEGIN_SRC shell
+  make install prefix=/c/emacs
+  cp /mingw64/bin/{libwinpthread-*.dll,libXpm-noX*.dll,libdbus-*.dll} /c/emacs/bin
+  cp /mingw64/bin/{libgomp-*.dll,libgcc_s_seh-*.dll,libglib-*.dll} /c/emacs/bin
+  cp /mingw64/bin/{libintl-*.dll,libiconv-*.dll,libgobject-*.dll} /c/emacs/bin
+  cp /mingw64/bin/{libffi-*.dll,libgdk_pixbuf-*.dll,libgio-*.dll} /c/emacs/bin
+  cp /mingw64/bin/{libgmodule-*.dll,zlib*.dll,librsvg-*.dll} /c/emacs/bin
+  cp /mingw64/bin/{libcairo-*.dll,libcroco-*.dll,libpango-*.dll} /c/emacs/bin
+  cp /mingw64/bin/{libpangocairo-*.dll,libxml2-*.dll,libfontconfig-*.dll} /c/emacs/bin
+  cp /mingw64/bin/{libfreetype-*.dll,libpixman-*.dll,libpng*.dll} /c/emacs/bin
+  cp /mingw64/bin/{libpangoft*.dll,libpangowin32-*.dll,liblzma-*.dll} /c/emacs/bin
+  cp /mingw64/bin/{libexpat-*.dll,libharfbuzz-*.dll,libgnutls-*.dll} /c/emacs/bin
+  cp /mingw64/bin/{libgnutlsxx-*.dll,libtiff-*.dll,libtiffxx-*.dll} /c/emacs/bin
+  cp /mingw64/bin/{libjpeg-*.dll,libgif-*.dll,libbz2-*.dll,libjbig-*.dll} /c/emacs/bin
+  cp /mingw64/bin/{libgmp-*.dll,libhogweed-*.dll,libnettle-*.dll} /c/emacs/bin
+  cp /mingw64/bin/{libp11-kit-*.dll,libtasn1-*.dll} /c/emacs/bin
+#+END_SRC
+
 *** Update your dotfile
-In the function =dotspacemacs/init= add the following variables if you don't
+In the function =dotspacemacs/init= add the following variables if you don’t
 have them already and initialize them:
 
 #+BEGIN_SRC emacs-lisp
-(defun dotspacemacs/init ()
- "Initialization:
-  This function is called at the very beginning of Spacemacs startup,
-  before layer configuration.
-  It should only modify the values of Spacemacs settings."
-    (setq-default
+  (defun dotspacemacs/init ()
+   "Initialization:
+    This function is called at the very beginning of Spacemacs startup,
+    before layer configuration.
+    It should only modify the values of Spacemacs settings."
+      (setq-default
 
-   ;; If non-nil then enable support for the portable dumper. You'll need
-   ;; to compile Emacs 27 from source following the instructions in file
-   ;; EXPERIMENTAL.org at to root of the git repository.
-   ;; (default nil)
-   dotspacemacs-enable-emacs-pdumper t
+     ;; If non-nil then enable support for the portable dumper. You'll need
+     ;; to compile Emacs 27 from source following the instructions in file
+     ;; EXPERIMENTAL.org at to root of the git repository.
+     ;; (default nil)
+     dotspacemacs-enable-emacs-pdumper t
 
-   ;; File path pointing to emacs 27.1 executable compiled with support
-   ;; for the portable dumper (this is currently the branch pdumper).
-   ;; (default "emacs")
-   dotspacemacs-emacs-pdumper-executable-file "/path/to/emacs27"
+     ;; File path pointing to emacs 27.1 executable compiled with support
+     ;; for the portable dumper (this is currently the branch pdumper).
+     ;; (default "emacs")
+     dotspacemacs-emacs-pdumper-executable-file "/path/to/emacs27"
 
-   ;; Name of the Spacemacs dump file. This is the file will be created by the
-   ;; portable dumper in the cache directory under dumps sub-directory.
-   ;; To load it when starting Emacs add the parameter `--dump-file'
-   ;; when invoking Emacs 27.1 executable on the command line, for instance:
-   ;;   ./emacs --dump-file=~/.emacs.d/.cache/dumps/spacemacs.pdmp
-   ;; (default spacemacs.pdmp)
-   dotspacemacs-emacs-dumper-dump-file "spacemacs.pdmp"))
+     ;; Name of the Spacemacs dump file. This is the file will be created by the
+     ;; portable dumper in the cache directory under dumps sub-directory.
+     ;; To load it when starting Emacs add the parameter `--dump-file'
+     ;; when invoking Emacs 27.1 executable on the command line, for instance:
+     ;;   ./emacs --dump-file=~/.emacs.d/.cache/dumps/spacemacs.pdmp
+     ;; (default spacemacs.pdmp)
+     dotspacemacs-emacs-dumper-dump-file "spacemacs.pdmp"))
 #+END_SRC
 
 A new user dotfile function has been added which is called before doing the
 dump. The function name is =dotspacemacs/user-load=. You can require additional
-libraries before the dump so they won't need to be lazy loaded.
+libraries before the dump so they won’t need to be lazy loaded.
 
-Add this to your dotfile if you don't have it already.
+Add this to your dotfile if you don’t have it already.
 
 #+BEGIN_SRC emacs-lisp
-(defun dotspacemacs/user-load ()
-  "Library to load while dumping.
-This function is called while dumping Spacemacs configuration. You can
-`require' or `load' the libraries of your choice that will be included
-in the dump."
-  )
+  (defun dotspacemacs/user-load ()
+    "Library to load while dumping.
+  This function is called while dumping Spacemacs configuration. You can
+  `require' or `load' the libraries of your choice that will be included
+  in the dump."
+    )
 #+END_SRC
 
 *Friendly suggestions:* If you have a lot of personal configuration in =user-init= and

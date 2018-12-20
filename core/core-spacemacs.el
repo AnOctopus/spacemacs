@@ -12,7 +12,9 @@
 
 (require 'subr-x nil 'noerror)
 (require 'core-emacs-backports)
+(require 'core-env)
 (require 'page-break-lines)
+(require 'core-hooks)
 (require 'core-debug)
 (require 'core-command-line)
 (require 'core-configuration-layer)
@@ -36,19 +38,6 @@
   :group 'starter-kit
   :prefix 'spacemacs-)
 
-;; loading progress bar variables
-(defvar spacemacs-loading-char ?█)
-(defvar spacemacs-loading-string "")
-(defvar spacemacs-loading-counter 0)
-(defvar spacemacs-loading-value 0)
-;; (defvar spacemacs-loading-text "Loading")
-;; (defvar spacemacs-loading-done-text "Ready!")
-(defvar spacemacs-loading-dots-chunk-count 3)
-(defvar spacemacs-loading-dots-count (window-total-size nil 'width))
-(defvar spacemacs-loading-dots-chunk-size
-  (/ spacemacs-loading-dots-count spacemacs-loading-dots-chunk-count))
-(defvar spacemacs-loading-dots-chunk-threshold 0)
-
 (defvar spacemacs-post-user-config-hook nil
   "Hook run after dotspacemacs/user-config")
 (defvar spacemacs-post-user-config-hook-run nil
@@ -69,7 +58,7 @@ the final step of executing code in `emacs-startup-hook'.")
   (hidden-mode-line-mode)
   (spacemacs//removes-gui-elements)
   (spacemacs//setup-ido-vertical-mode)
-  ;; explicitly set the prefered coding systems to avoid annoying prompt
+  ;; explicitly set the preferred coding systems to avoid annoying prompt
   ;; from emacs (especially on Microsoft Windows)
   (prefer-coding-system 'utf-8)
   ;; TODO move these variables when evil is removed from the bootstrapped
@@ -98,7 +87,7 @@ the final step of executing code in `emacs-startup-hook'.")
   ;; like `dotspacemacs/user-config`, users expect the custom settings to be the
   ;; effective ones.
   ;; Note: Loading custom-settings twice is not ideal since they can have side
-  ;; effects! Maybe an inhibit variable in Emacs can supress these side effects?
+  ;; effects! Maybe an inhibit variable in Emacs can suppress these side effects?
   (spacemacs/initialize-custom-file)
   ;; Commenting the first load although it is mentioned above that we must do it
   ;; I don't recall why we must load the custom settings twice and my experiment
@@ -127,7 +116,7 @@ the final step of executing code in `emacs-startup-hook'.")
    ;; believe me? Go ahead, try it. After you'll have notice that this was true,
    ;; increase the counter bellow so next people will give it more confidence.
    ;; Counter = 1
-   (message "Setting the font...")
+   (spacemacs-buffer/message "Setting the font...")
    (unless (spacemacs/set-default-font dotspacemacs-default-font)
      (spacemacs-buffer/warning
       "Cannot find any of the specified fonts (%s)! Font settings may not be correct."
@@ -157,6 +146,10 @@ the final step of executing code in `emacs-startup-hook'.")
   ;; check for new version
   (if dotspacemacs-mode-line-unicode-symbols
       (setq-default spacemacs-version-check-lighter "[⇪]"))
+  ;; load environment variables
+  (if (fboundp 'dotspacemacs/user-env)
+      (dotspacemacs/call-user-env)
+    (spacemacs/load-spacemacs-env))
   ;; install the dotfile if required
   (dotspacemacs/maybe-install-dotfile))
 

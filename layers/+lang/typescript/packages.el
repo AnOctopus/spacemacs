@@ -15,6 +15,7 @@
         company
         eldoc
         flycheck
+        lsp-javascript-typescript
         smartparens
         tide
         typescript-mode
@@ -40,8 +41,14 @@
   (spacemacs/enable-flycheck 'typescript-mode)
   (spacemacs/enable-flycheck 'typescript-tsx-mode)
   (with-eval-after-load 'tide
-    (flycheck-add-mode 'typescript-tide 'typescript-tsx-mode))
-  (flycheck-add-mode 'typescript-tslint 'typescript-tsx-mode))
+    (with-eval-after-load 'flycheck
+      (flycheck-add-mode 'typescript-tide 'typescript-tsx-mode)
+      (flycheck-add-mode 'typescript-tslint 'typescript-tsx-mode))))
+
+(defun typescript/post-init-lsp-javascript-typescript ()
+  (when (eq typescript-backend 'lsp)
+    (spacemacs//setup-lsp-jump-handler 'typescript-mode
+                                'typescript-tsx-mode)))
 
 (defun typescript/post-init-smartparens ()
   (if dotspacemacs-smartparens-strict-mode
@@ -72,18 +79,28 @@
       (spacemacs/declare-prefix-for-mode 'typescript-tsx-mode "ms" "send")
 
       (setq keybindingList '("Ee" tide-fix
+                             "Ed" tide-add-tslint-disable-next-line
                              "gb" tide-jump-back
-                             "gt" typescript/jump-to-type-def
+                             "gg" tide-jump-to-definition
+                             "gt" spacemacs/typescript-jump-to-type-def
                              "gu" tide-references
                              "hh" tide-documentation-at-point
+                             "ri" tide-organize-imports
                              "rr" tide-rename-symbol
+                             "rf" tide-rename-file
                              "sr" tide-restart-server)
             typescriptList (cons 'typescript-mode keybindingList)
             typescriptTsxList (cons 'typescript-tsx-mode
                                     (cons "gg" (cons 'tide-jump-to-definition
                                                      keybindingList ))))
       (apply 'spacemacs/set-leader-keys-for-major-mode typescriptList)
-      (apply 'spacemacs/set-leader-keys-for-major-mode typescriptTsxList))))
+      (apply 'spacemacs/set-leader-keys-for-major-mode typescriptTsxList)))
+
+  (add-to-list 'spacemacs-jump-handlers-typescript-tsx-mode
+               (add-to-list 'spacemacs-jump-handlers '(tide-jump-to-definition :async t))
+               '(tide-jump-to-definition :async t))
+  (add-to-list 'spacemacs-jump-handlers-typescript-mode
+               '(tide-jump-to-definition :async t)))
 
 (defun typescript/post-init-web-mode ()
   (define-derived-mode typescript-tsx-mode web-mode "TypeScript-tsx")
