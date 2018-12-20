@@ -15,13 +15,13 @@
 (defun spacemacs//javascript-setup-backend ()
   "Conditionally setup javascript backend."
   (pcase javascript-backend
-    (`tern (spacemacs/tern-setup-tern))
+    (`tern (spacemacs//javascript-setup-tern))
     (`lsp (spacemacs//javascript-setup-lsp))))
 
 (defun spacemacs//javascript-setup-company ()
   "Conditionally setup company based on backend."
   (pcase javascript-backend
-    (`tern (spacemacs/tern-setup-tern-company 'js2-mode))
+    (`tern (spacemacs//javascript-setup-tern-company))
     (`lsp (spacemacs//javascript-setup-lsp-company))))
 
 
@@ -31,9 +31,7 @@
   "Setup lsp backend."
   (if (configuration-layer/layer-used-p 'lsp)
       (progn
-        (spacemacs//setup-lsp-jump-handler 'js2-mode)
-        (lsp-javascript-typescript-enable)
-        (lsp-javascript-flow-enable))
+        (lsp-javascript-typescript-enable))
     (message (concat "`lsp' layer is not installed, "
                      "please add `lsp' layer to your dotfile."))))
 
@@ -41,15 +39,38 @@
   "Setup lsp auto-completion."
   (if (configuration-layer/layer-used-p 'lsp)
       (progn
-        (fix-lsp-company-prefix)
         (spacemacs|add-company-backends
           :backends company-lsp
           :modes js2-mode
           :append-hooks nil
           :call-hooks t)
-        (company-mode))
+        (company-mode)
+        (fix-lsp-company-prefix))
     (message (concat "`lsp' layer is not installed, "
                      "please add `lsp' layer to your dotfile."))))
+
+
+;; tern
+(defun spacemacs//javascript-setup-tern ()
+  (if (configuration-layer/layer-used-p 'tern)
+      (when (locate-file "tern" exec-path)
+        (spacemacs/tern-setup-tern))
+    (message (concat "Tern was configured as the javascript backend but "
+                     "the `tern' layer is not present in your `.spacemacs'!"))))
+
+(defun spacemacs//javascript-setup-tern-company ()
+  (if (configuration-layer/layer-used-p 'tern)
+      (when (locate-file "tern" exec-path)
+        (spacemacs/tern-setup-tern-company 'js2-mode))
+    (message (concat "Tern was configured as the javascript backend but "
+                     "the `tern' layer is not present in your `.spacemacs'!"))))
+
+
+;; flycheck
+
+(defun spacemacs//javascript-setup-eslint ()
+  (when-let ((found (executable-find "eslint_d")))
+    (set (make-local-variable 'flycheck-javascript-eslint-executable) found)))
 
 
 ;; js-doc

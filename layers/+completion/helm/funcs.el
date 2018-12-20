@@ -444,9 +444,10 @@ If DEFAULT-INPUTP is non nil then the current region or symbol at point
                     (helm-read-file-name
                      "Search in file(s): "
                      :marked-candidates t
-                     :preselect (if helm-ff-transformer-show-only-basename
-                                    (helm-basename preselection)
-                                  preselection)))))
+                     :preselect (when preselection
+                                  (if helm-ff-transformer-show-only-basename
+                                      (helm-basename preselection)
+                                    preselection))))))
     (helm-do-grep-1 targets nil nil nil nil use-region-or-symbol-p)))
 
 (defun spacemacs/helm-file-do-grep ()
@@ -503,6 +504,8 @@ If DEFAULT-INPUTP is non nil then the current region or symbol at point
   "Custom spacemacs implementation for calling helm-find-files-1.
 Removes the automatic guessing of the initial value based on thing at point. "
   (interactive "P")
+  ;; fixes #10882 and #11270
+  (require 'helm-files)
   (let* ((hist (and arg helm-ff-history (helm-find-files-history)))
          (default-input hist)
          (input (cond ((and (eq major-mode 'dired-mode) default-input)
@@ -518,7 +521,7 @@ Removes the automatic guessing of the initial value based on thing at point. "
 (defmacro spacemacs||set-helm-key (keys func)
   "Define a key bindings for FUNC using KEYS.
 Ensure that helm is required before calling FUNC."
-  (let ((func-name (intern (format "spacemacs/%s" (symbol-name func)))))
+  (let ((func-name (intern (format "lazy-helm/%s" (symbol-name func)))))
     `(progn
        (defun ,func-name ()
          ,(format "Wrapper to ensure that `helm' is loaded before calling %s."
@@ -562,7 +565,7 @@ not set to any window (but in the case of files, they are still opened
 to buffers)."
   (let ((num-buffers (length buffers))
         (num-windows (length (winum--window-list)))
-        (cur-win (winum-get-number))
+        (cur-win (or (winum-get-number) (winum-get-number (other-window 1))))
         (num-buffers-placed 0))
     (cl-loop for buffer in buffers do
              (when (>= num-buffers-placed num-windows) cl-return)

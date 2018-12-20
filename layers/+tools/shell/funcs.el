@@ -43,16 +43,18 @@
 (defun spacemacs/default-pop-shell ()
   "Open the default shell in a popup."
   (interactive)
-  (let ((shell (if (eq 'multi-term shell-default-shell)
-                   'multiterm
-                 shell-default-shell)))
+  (let ((shell (case shell-default-shell
+                 ('multi-term 'multiterm)
+                 ('shell 'inferior-shell)
+                 (t shell-default-shell))))
     (call-interactively (intern (format "spacemacs/shell-pop-%S" shell)))))
 
 (defun spacemacs/resize-shell-to-desired-width ()
-  (enlarge-window-horizontally (-
-                                (/ (* (frame-width) shell-default-width) 100)
-                                (window-width)))
-)
+  (when (and (string= (buffer-name) shell-pop-last-shell-buffer-name)
+             (memq shell-pop-window-position '(left right)))
+    (enlarge-window-horizontally (- (/ (* (frame-width) shell-default-width)
+                                       100)
+                                    (window-width)))))
 
 (defmacro make-shell-pop-command (func &optional shell)
   "Create a function to open a shell via the function FUNC.
@@ -173,12 +175,19 @@ is achieved by adding the relevant text properties."
   (define-key eshell-mode-map
     (kbd "M-l") 'spacemacs/helm-eshell-history))
 
-(defun multiterm (_)
-  "Wrapper to be able to call multi-term from shell-pop"
-  (interactive)
-  (multi-term))
-
 (defun term-send-tab ()
   "Send tab in term mode."
   (interactive)
   (term-send-raw-string "\t"))
+
+;; Wrappers for non-standard shell commands
+(defun multiterm (&optional ARG)
+  "Wrapper to be able to call multi-term from shell-pop"
+  (interactive)
+  (multi-term))
+
+(defun inferior-shell (&optional ARG)
+  "Wrapper to open shell in current window"
+  (interactive)
+  (switch-to-buffer "*shell*")
+  (shell "*shell*"))

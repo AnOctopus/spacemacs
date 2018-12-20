@@ -24,14 +24,13 @@
         js2-mode
         js2-refactor
         livid-mode
-        (lsp-javascript-typescript
-         :requires lsp-mode
-         :location (recipe :fetcher github
-                           :repo "emacs-lsp/lsp-javascript"))
+        (lsp-javascript-typescript :requires lsp-mode)
         org
+        prettier-js
         skewer-mode
         tern
-        web-beautify))
+        web-beautify
+        ))
 
 (defun javascript/post-init-add-node-modules-path ()
   (spacemacs/add-to-hooks #'add-node-modules-path '(css-mode-hook
@@ -47,7 +46,8 @@
   (add-hook 'js2-mode-local-vars-hook #'spacemacs//javascript-setup-company))
 
 (defun javascript/post-init-flycheck ()
-  (spacemacs/enable-flycheck 'js2-mode))
+  (spacemacs/enable-flycheck 'js2-mode)
+  (add-hook 'js2-mode-hook #'spacemacs//javascript-setup-eslint t))
 
 (defun javascript/post-init-ggtags ()
   (add-hook 'js2-mode-local-vars-hook #'spacemacs/ggtags-mode-enable))
@@ -75,11 +75,10 @@
 (defun javascript/init-js2-mode ()
   (use-package js2-mode
     :defer t
-    :mode "\\.m?js\\'"
+    :mode (("\\.m?js\\'"  . js2-mode))
     :init
     (progn
-      (add-hook 'js2-mode-local-vars-hook
-                #'spacemacs//javascript-setup-backend)
+      (add-hook 'js2-mode-local-vars-hook #'spacemacs//javascript-setup-backend)
       ;; safe values for backend to be used in directory file variables
       (dolist (value '(lsp tern))
         (add-to-list 'safe-local-variable-values
@@ -171,7 +170,11 @@
   (use-package lsp-javascript-typescript
     :commands lsp-javascript-typescript-enable
     :defer t
-    :config (require 'lsp-javascript-flow)))
+    :config (spacemacs//setup-lsp-jump-handler 'js2-mode)))
+
+(defun javascript/pre-init-prettier-js ()
+  (if (eq javascript-fmt-tool 'prettier)
+      (add-to-list 'spacemacs--prettier-modes 'js2-mode)))
 
 (defun javascript/init-skewer-mode ()
   (use-package skewer-mode
@@ -204,4 +207,6 @@
   (add-to-list 'tern--key-bindings-modes 'js2-mode))
 
 (defun javascript/pre-init-web-beautify ()
-  (add-to-list 'spacemacs--web-beautify-modes (cons 'js2-mode 'web-beautify-js)))
+  (if (eq javascript-fmt-tool 'web-beautify)
+      (add-to-list 'spacemacs--web-beautify-modes
+                   (cons 'js2-mode 'web-beautify-js))))
