@@ -30,7 +30,8 @@ values."
         dotspacemacs-configuration-layer-path '()
         ;; List of configuration layers to load.
         dotspacemacs-configuration-layers
-        '(ansible
+        '(
+             ansible
              auto-completion
              chrome
              clojure
@@ -43,12 +44,15 @@ values."
                  evil-snipe-enable-alternate-f-and-t-behaviors t)
              fasd
              git
+             (go :variables
+                 go-backend 'lsp)
              graphviz
              (haskell :variables
                  haskell-completion-backend 'intero)
              html
              java
-             javascript
+             (javascript :variables
+                 javascript-backend 'lsp)
              kotlin
              latex
              lsp
@@ -84,7 +88,9 @@ values."
                                             ("e" "Email Task" entry (file+headline "agenda/notes.org" "unsorted")
                                                 "* TODO %?\n %a\n %u\n %i\n")))
              (python :variables
-                 python-backend 'lsp)
+                 python-backend 'lsp
+                 python-pipenv-activate t
+                 )
              racket
              react
              (scala :variables
@@ -95,6 +101,7 @@ values."
              shell-scripts
              spell-checking
              syntax-checking
+             terraform
              (version-control :variables version-control-diff-tool 'git-gutter)
              yaml
              )
@@ -373,12 +380,12 @@ you should place your code here."
     (setq
         custom-file "~/.emacs.d/custom.el"
         spacemacs-useful-buffers-regexp '("\\*\\(scratch\\|spacemacs\\|notmuch.*\\)\\*")
+        column-enforce-column 120
         )
     (load custom-file)
     (define-key evil-normal-state-map (kbd "SPC #") #'server-edit)
     ;; (magit-define-popup-switch 'magit-log-popup
     ;;   ?m "Omit merge commits" "--no-merges" t)
-
     (spacemacs/toggle-highlight-long-lines-globally-on)
     (spacemacs/toggle-truncate-lines-off)
     (spacemacs/toggle-evil-safe-lisp-structural-editing-on-register-hooks)
