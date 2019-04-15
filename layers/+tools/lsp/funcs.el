@@ -51,7 +51,7 @@ https://github.com/emacs-lsp/lsp-javascript/issues/9#issuecomment-379515379"
     ;;jump
     ;;backend
     "ba" #'lsp-execute-code-action
-    "bc" #'lsp-capabilities
+    "bd" #'lsp-describe-session
     "br" #'lsp-restart-workspace
     ;;refactor
     "rr" #'lsp-rename
@@ -123,7 +123,7 @@ https://github.com/emacs-lsp/lsp-javascript/issues/9#issuecomment-379515379"
   (intern (concat layer-name "/" nav-mode "-" (symbol-name kind))))
 
 (defun spacemacs//lsp-define-custom-extension (layer-name nav-mode kind request &optional extra)
-  (let ((lsp-extension-fn (if (eq nav-mode "find")
+  (let ((lsp-extension-fn (if (equal nav-mode "find")
                             'lsp-find-locations
                             'lsp-ui-peek-find-custom))
          (extension-name (spacemacs//lsp-get-extension-name layer-name nav-mode kind))
