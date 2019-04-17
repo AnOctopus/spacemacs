@@ -391,7 +391,7 @@ you should place your code here."
     (spacemacs/toggle-evil-safe-lisp-structural-editing-on-register-hooks)
     (add-hook 'org-mode-hook #'spacemacs/toggle-truncate-lines-off)
 
-    (custom-set-faces '(font-lock-comment-face ((t (:foreground "deep sky blue")))))
+    (custom-set-faces '(font-lock-comment-face ((t (:foreground "DeepSkyBlue3")))))
     (spacemacs/set-leader-keys-for-major-mode 'org-agenda-mode
         "r" 'org-agenda-refile
         "e" 'org-agenda-set-effort)
