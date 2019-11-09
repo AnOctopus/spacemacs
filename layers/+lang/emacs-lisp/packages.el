@@ -126,7 +126,8 @@
           "df" 'spacemacs/edebug-instrument-defun-on
           "dF" 'spacemacs/edebug-instrument-defun-off))
       ;; assure that edebug key bindings are effective
-      (add-hook 'edebug-mode-hook 'spacemacs//edebug-hook t))))
+        ;; (add-hook 'edebug-mode-hook 'spacemacs//edebug-hook t)
+        )))
 
 (defun emacs-lisp/post-init-eldoc ()
   (add-hook 'emacs-lisp-mode-hook 'eldoc-mode))
