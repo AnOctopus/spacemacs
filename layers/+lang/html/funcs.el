@@ -11,16 +11,17 @@
 
 (defun spacemacs/emmet-expand ()
   (interactive)
-  (if (bound-and-true-p yas-minor-mode)
-      (call-interactively 'emmet-expand-yas)
-    (call-interactively 'emmet-expand-line)))
+  (unless (if (bound-and-true-p yas-minor-mode)
+              (call-interactively 'emmet-expand-yas)
+            (call-interactively 'emmet-expand-line))
+    (indent-for-tab-command)))
 
 (defun spacemacs/impatient-mode ()
   (interactive)
   (if (bound-and-true-p impatient-mode)
       (impatient-mode -1)
     (unless (process-status "httpd")
-        (httpd-start))
+      (httpd-start))
     (impatient-mode)
     (when (string-match-p "\\.html\\'" (buffer-name))
       (imp-visit-buffer))))
@@ -47,3 +48,18 @@
   (search-backward "{")
   (while (not (looking-at "}"))
     (join-line -1)))
+
+(defun spacemacs//setup-lsp-for-web-mode-buffers ()
+  "Start lsp-mode and configure for buffer."
+  (if (configuration-layer/layer-used-p 'lsp)
+      (lsp)
+    (message "`lsp' layer is not installed, please add `lsp' layer to your dotfile.")))
+
+(defun spacemacs//setup-lsp-for-html-buffer ()
+  "If buffer extension is html then turn on lsp."
+  (let ((buffer-extension (save-match-data
+                             ;; regex to capture extension part from file.html or file.html<whaterver>
+                             (when (string-match "\\.\\([^.<]*\\)<*[^.]*$" (buffer-name))
+                               (match-string 1 (buffer-name))))))
+    (when (string= buffer-extension "html")
+      (spacemacs//setup-lsp-for-web-mode-buffers))))

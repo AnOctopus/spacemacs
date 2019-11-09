@@ -1,8 +1,10 @@
 #+TITLE: Chrome layer
 
+#+TAGS: layer|tool
+
 [[file:img/chrome.png]]
 
-* Table of Contents                     :TOC_4_gh:noexport:
+* Table of Contents                     :TOC_5_gh:noexport:
 - [[#description][Description]]
   - [[#features][Features:]]
 - [[#install][Install]]
@@ -59,7 +61,7 @@ If you want Emacs to switch focus to Chrome after done editing, you can utilize
 Emacs cannot control focus of windows for external apps, so you need to use some
 sort of command line window manager like =wmctrl=.
 
-The following example works on OS X:
+The following example works on macOS:
 
 #+BEGIN_SRC emacs-lisp
   (add-hook 'edit-server-done-hook (lambda () (shell-command "open -a \"Google Chrome\"")))
