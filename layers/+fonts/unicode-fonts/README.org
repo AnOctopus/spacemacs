@@ -1,6 +1,8 @@
 #+TITLE: unicode-fonts layer
 
-* Table of Contents                     :TOC_4_gh:noexport:
+#+TAGS: font|layer
+
+* Table of Contents                     :TOC_5_gh:noexport:
 - [[#description][Description]]
   - [[#features][Features:]]
 - [[#install][Install]]
@@ -12,7 +14,7 @@ install the fonts listed in the [[https://github.com/rolandwalker/unicode-fonts#
 ** Features:
 - Display unicode glyphs using the best available font.
 - Easily override glyphs or sections of glyphs.
-- Display color emoji on both the Mac port version of Emacs and emacs-plus (with
+- Display color emoji on both the macOS port version of Emacs and emacs-plus (with
   =unicode-fonts-force-multi-color-on-mac= set to non nil).
 
 * Install

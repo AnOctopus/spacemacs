@@ -9,7 +9,20 @@
 ;;
 ;;; License: GPLv3
 
-(setq gnus-packages '(gnus))
+(setq gnus-packages '(
+                      gnus
+                      window-purpose
+                      persp-mode
+                      ))
+
+(defun gnus/pre-init-persp-mode ()
+  (spacemacs|use-package-add-hook persp-mode
+    :post-config
+    (progn
+      (spacemacs|define-custom-layout gnus-spacemacs-layout-name
+        :binding gnus-spacemacs-layout-binding
+        :body
+        (call-interactively 'gnus)))))
 
 (defun gnus/init-gnus ()
   "Initialize my package"
@@ -73,7 +86,9 @@
             (gnus-summary-scroll-up arg))))
       (add-to-list 'nnmail-extra-headers nnrss-url-field)
 
-      (evilified-state-evilify gnus-group-mode gnus-group-mode-map)
+      (evilified-state-evilify gnus-group-mode gnus-group-mode-map
+        (kbd "g r") 'gnus-group-get-new-news
+        (kbd "O") 'gnus-group-group-map)
       (evilified-state-evilify gnus-server-mode gnus-server-mode-map)
       (evilified-state-evilify gnus-browse-mode gnus-browse-mode-map)
       (evilified-state-evilify gnus-article-mode gnus-article-mode-map)
@@ -81,3 +96,13 @@
         (kbd "J") 'gnus-summary-next-article
         (kbd "K") 'gnus-summary-prev-article
         (kbd "<RET>") 'spacemacs/browse-nnrss-url))))
+
+(defun gnus/pre-init-window-purpose ()
+  (spacemacs|use-package-add-hook window-purpose
+    :pre-config
+    (dolist (mode '(gnus-group-mode
+                    gnus-server-mode
+                    gnus-browse-mode
+                    gnus-article-mode
+                    gnus-summary-mode))
+      (add-to-list 'purpose-user-mode-purposes (cons mode 'mail)))))

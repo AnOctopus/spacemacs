@@ -45,20 +45,28 @@
              (when (member key-value allowed-values)
                (setf (symbol-value internal-var) key-value))))
 
+  (when osx-swap-option-and-command
+    (cl-rotatef mac-command-modifier mac-option-modifier))
+
   (defun kbd-mac-command (keys)
-    "Wraps `kbd' function with Mac OSX compatible Command-key (⌘).
-KEYS should be a string such as \"f\" which will be turned into values
-such as \"H-f\", \"s-f\", or \"A-f\" depending on the value of
-`mac-commmand-modifier' which could be `hyper', `super', or `alt'.
-KEYS with a string of \"C-f\" are also valid and will be turned into
-values such as \"H-C-f\".
-Returns nil if `mac-command-modifier' is set to `none' or something
-other than the three sane values listed above."
+    "Call `kbd' with a macOS-compatible Command-key (⌘) prefixed.
+KEYS should be a string suitable as input to `kbd'.
+`mac-commmand-modifier' determines which prefix will be added; it
+should be set to one of `hyper', `super', or `alt'.  For example,
+if KEYS is the string `f', it will be prefixed as `H-f', `s-f',
+or `A-f' accordingly.  If KEYS is of the form `C-f', it likewise
+will be prefixed as `H-C-f', `s-C-f', or `A-C-f'.
+
+If `mac-command-modifier' is set to `none' or something other
+than the three values listed above, `H-' will be used as the
+default."
     (let ((found (assoc mac-command-modifier
                         '((hyper . "H-")
                           (super . "s-")
                           (alt   . "A-")))))
-      (when found (kbd (concat (cdr found) keys)))))
+      (if found
+          (kbd (concat (cdr found) keys))
+        (kbd (concat "H-" keys)))))
 
   ;; Keybindings
   (global-set-key (kbd-mac-command "=") 'spacemacs/scale-up-font)

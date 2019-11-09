@@ -1,6 +1,8 @@
 #+TITLE: IPython Notebook layer
 
-* Table of Contents                     :TOC_4_gh:noexport:
+#+TAGS: layer|programming|util
+
+* Table of Contents                     :TOC_5_gh:noexport:
 - [[#description][Description]]
   - [[#features][Features:]]
 - [[#list-of-todos][List of TODOS]]
@@ -67,7 +69,8 @@ Have an IPython notebook running
 * Using the IPython notebook
 ** Open Notebook List
 This layer is lazy loaded so the transient-state will only work after you summon the
-command =ein:notebooklist-open= which is bound to ~SPC a y o~
+command =ein:notebooklist-open= which is bound to ~SPC a y o~ or =ein:run= which is
+bound to ~SPC a y r~.
 
 ** Key bindings
 The key bindings can be used through a transient state or the usual evil-leader.
