@@ -34,13 +34,11 @@ values."
              ansible
              auto-completion
              chrome
-             clojure
              colors
              command-log
              dap
              docker
              emacs-lisp
-             erc
              (evil-snipe :variables
                  evil-snipe-enable-alternate-f-and-t-behaviors t)
              fasd
@@ -51,22 +49,19 @@ values."
                  )
              graphviz
              (haskell :variables
-                 haskell-completion-backend 'intero)
+                 haskell-completion-backend 'ghci)
              html
-             java
              (javascript :variables
                  javascript-backend 'lsp)
-             kotlin
-             latex
              (lsp :variables
                  lsp-print-io t
                  lsp-print-performance t
                  company-lsp-cache-candidates 'auto
-                 lsp-enable-file-watchers nil
+                 ;; lsp-enable-file-watchers nil
+                 lsp-pyls-server-command '("pyls" "-vv" "--log-file" "pyls.log")
                  )
              markdown
              (mu4e :variables
-                 ;; mu4e-enable-notifications t
                  mu4e-enable-mode-line t
                  mu4e-use-maildirs-extension t
                  mu4e-maildir "~/maildir"
@@ -80,43 +75,18 @@ values."
                  mu4e-index-update-error-warning nil
                  )
              no-dots
-             (org :variables
-                 org-directory "~/org/agenda"
-                 org-log-refile 'time
-                 org-agenda-files '("~/org/agenda")
-                 org-agenda-start-on-weekday nil
-                 org-scheduled-past-days 0
-                 org-deadline-past-days 0
-                 org-agenda-todo-ignore-scheduled 0
-                 org-agenda-todo-ignore-deadlines 0
-                 org-pomodoro-keep-killed-pomodoro-time t
-                 org-todo-keywords '("TODO(t)"
-                                        "STARTED(s)"
-                                        "WAITING(w)"
-                                        "|"
-                                        "CANCELLED(c)"
-                                        "DONE(d)")
-                 org-capture-templates '(("t" "Todo" entry (file+headline "agenda/notes.org" "unsorted")
-                                             "* TODO %?\n  %u\n  %i\n")
-                                            ("e" "Email Task" entry (file+headline "agenda/notes.org" "unsorted")
-                                                "* TODO %?\n %a\n %u\n %i\n")))
+             org
              (python :variables
                  python-backend 'lsp
-                 ;; python-pipenv-activate t
                  lsp-pyls-plugins-pyflakes-enabled nil
                  lsp-pyls-plugins-rope-completion-enabled nil
                  lsp-pyls-plugins-yapf-enabled nil
                  lsp-pyls-plugins-jedi-completion-include-params nil
-                 ;; lsp-pyls-configuration-sources ["flake8"]
-                 lsp-pyls-plugins-pylint-enabled nil
+                 ;; lsp-pyls-plugins-pylint-enabled t
+                 lsp-pyls-plugins-mccabe-enabled nil
                  )
-             racket
              react
              rust
-             (scala :variables
-                 scala-enable-eldoc t
-                 ensime-graphical-tooltips t
-                 ensime-startup-notification nil)
              shell
              shell-scripts
              ;; flyspell is a surprisingly bad cpu/memory hog
@@ -134,9 +104,10 @@ values."
         ;; configuration in `dotspacemacs/user-config'.
         dotspacemacs-additional-packages
         '(
-             keyfreq
              darktooth-theme
-             dired-narrow
+             poetry
+             rainbow-blocks
+             cov
              )
         ;; A list of packages that cannot be updated.
         dotspacemacs-frozen-packages '()
@@ -258,8 +229,11 @@ values."
         ;; with 2 themes variants, one dark and one light)
         dotspacemacs-themes
         '(
+             (dt-min :location (recipe
+                                   :fetcher github
+                                   :repo "anoctopus/emacs-theme-darktooth"))
              darktooth
-             spacemacs-dark
+             ;; spacemacs-dark
              )
 
         ;; If non nil the cursor color matches the state color in GUI Emacs.
@@ -268,7 +242,7 @@ values."
         ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
         ;; quickly tweak the mode-line size to make separators look not too crappy.
         dotspacemacs-default-font '("Source Code Pro"
-                                       :size 14
+                                       :size 18
                                        :weight normal
                                        :width normal
                                        :powerline-scale 1.3)
@@ -454,7 +428,7 @@ values."
 
         ;; If non-nil, start an Emacs server if one is not already running.
         ;; (default nil)
-        dotspacemacs-enable-server nil
+        dotspacemacs-enable-server t
 
         ;; Set the emacs server socket location.
         ;; If nil, uses whatever the Emacs default is, otherwise a directory path
@@ -524,7 +498,6 @@ This function defines the environment variables for your Emacs session. By
 default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
-    ;; (spacemacs/load-spacemacs-env)
     )
 
 (defun dotspacemacs/user-init ()
@@ -534,7 +507,6 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
-    ;; (setq custom-file "~/.emacs.d/custom.el")
     )
 
 (defun dotspacemacs/user-config ()
@@ -550,9 +522,10 @@ you should place your code here."
         nxml-child-indent 4
         nxml-slash-auto-complete-flag t
         tab-width 4
-        column-enforce-column 100
+        column-enforce-column 88
         tab-always-indent t
         vc-follow-symlinks t
+        yaml-indent-offset 2
         )
     (setq
         custom-file "~/.emacs.d/custom.el"
@@ -565,8 +538,9 @@ you should place your code here."
     (spacemacs/toggle-evil-safe-lisp-structural-editing-on-register-hooks)
     (add-hook 'org-mode-hook #'spacemacs/toggle-truncate-lines-off)
     (add-hook 'message-mode-hook #'spacemacs/toggle-auto-fill-mode-off) ; Thanks jen <3
+    ;; (poetry-tracking-mode 't)
 
-    (custom-set-faces '(font-lock-comment-face ((t (:foreground "DeepSkyBlue3")))))
+    (add-to-list 'face-ignored-fonts "Noto Color Emoji")
     (spacemacs/set-leader-keys-for-major-mode 'org-agenda-mode
         "r" 'org-agenda-refile
         "e" 'org-agenda-set-effort)
@@ -614,10 +588,10 @@ you should place your code here."
                                   (when msg
                                       (or
                                           (mu4e-message-contact-field-matches msg
-                                              :to "sean.andrew.walker@gmail.com")
+                                              :to (rot13-string "frna.naqerj.jnyxre@tznvy.pbz"))
                                           (mu4e-message-contact-field-matches msg
                                               :to "crazy.gold.shield@gmail.com"))))
-                  :vars '((user-mail-address . "sean.andrew.walker@gmail.com")
+                  :vars '((user-mail-address . "crazy.gold.shield@gmail.com")
                              (mu4e-sent-messages-behavior . delete)
                              (mu4e-sent-folder . "/gmail/[Gmail]/Sent Mail")
                              (mu4e-drafts-folder . "/gmail/[Gmail]/Drafts")
@@ -625,14 +599,52 @@ you should place your code here."
                              (mu4e-refile-folder . "/archive")
                              )))
         )
+
+
+    (add-to-list 'mu4e-marks
+        '(archive
+             :char       "A"
+             :prompt     "Archive"
+             :dyn-target (lambda (target msg) (mu4e-get-refile-folder msg))
+             :action (lambda (docid msg target)
+                         (mu4e~proc-move docid (mu4e~mark-check-target target)
+                             "+S-u-N")))
+        )
+    (add-to-list 'mu4e-marks
+        '(delread
+             :char       "^"
+             :prompt     "^Mark read and delete"
+             :dyn-target (lambda (target msg) (mu4e-get-trash-folder msg))
+             :action (lambda (docid msg target)
+                         ;; must come before proc-move since retag runs
+                         ;; 'sed' on the file
+                         (mu4e~proc-move docid (mu4e~mark-check-target target)
+                             "+T+S-u-N")))
+        )
+
+
     (with-eval-after-load 'mu4e-alert
         (mu4e-alert-set-default-style 'notifications))
     (advice-add #'shr-colorize-region :around (defun shr-no-colourise-region (&rest ignore)))
     (setq shr-use-fonts nil)
-    (keyfreq-mode 1)
-    (keyfreq-autosave-mode 1)
+    ;; (keyfreq-mode 1)
+    ;; (keyfreq-autosave-mode 1)
     (spacemacs/set-leader-keys
         "xc" 'count-words)
-    (server-start)
+    (add-hook 'yaml-mode-hook
+        (lambda ()
+            (setq-local yaml-indent-offset 2)))
 
+    ;; Stolen from doom-emacs
+    (defun doom-defer-garbage-collection-h ()
+        (setq gc-cons-threshold most-positive-fixnum))
+
+    (defun doom-restore-garbage-collection-h ()
+        ;; Defer it so that commands launched immediately after will enjoy the
+        ;; benefits.
+        (run-at-time
+            1 nil (lambda () (setq gc-cons-threshold 819200))))
+
+    (add-hook 'minibuffer-setup-hook #'doom-defer-garbage-collection-h)
+    (add-hook 'minibuffer-exit-hook #'doom-restore-garbage-collection-h)
     )
