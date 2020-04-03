@@ -21,7 +21,7 @@
       (pdf-tools-install)
 
       (spacemacs|define-transient-state pdf-tools
-        :title "PDF-tools transient state"
+        :title "PDF-tools Transient State"
         :on-enter (setq which-key-inhibit t)
         :on-exit (setq which-key-inhibit nil)
         :evil-leader-for-mode (pdf-view-mode . ".")
@@ -123,6 +123,7 @@
         (kbd "C-u") 'pdf-view-scroll-down-or-previous-page
         (kbd "C-d") 'pdf-view-scroll-up-or-next-page
         (kbd "``")  'pdf-history-backward
+        "'" 'pdf-view-jump-to-register
         ;; Search
         "/" 'isearch-forward
         "?" 'isearch-backward
