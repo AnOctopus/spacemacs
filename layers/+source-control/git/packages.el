@@ -26,12 +26,13 @@
         (helm-gitignore :requires helm)
         magit
         magit-gitflow
+        magit-section
         magit-svn
         org
         (orgit :requires org)
         smeargle
-        transient
-        ))
+        transient))
+
 
 (defun git/pre-init-golden-ratio ()
   (spacemacs|use-package-add-hook golden-ratio
@@ -201,10 +202,10 @@ Press [_b_] again to blame further in the history, [_q_] to go up or quit."
       ;; bind function keys
       ;; (define-key magit-mode-map (kbd "<tab>") 'magit-section-toggle)
       (evilified-state-evilify-map magit-repolist-mode-map
-          :mode magit-repolist-mode
-          :bindings
-          (kbd "gr") 'magit-list-repositories
-          (kbd "RET") 'magit-repolist-status)
+        :mode magit-repolist-mode
+        :bindings
+        (kbd "gr") 'magit-list-repositories
+        (kbd "RET") 'magit-repolist-status)
       ;; confirm/abort
       (when dotspacemacs-major-mode-leader-key
         (add-hook 'with-editor-mode-hook 'evil-normalize-keymaps)
@@ -229,7 +230,17 @@ Press [_b_] again to blame further in the history, [_q_] to go up or quit."
               'magit-display-buffer-fullframe-status-v1))
       (spacemacs|hide-lighter with-editor-mode)
       ;; Workaround for #12747 - org-mode
-      (evil-define-key 'normal magit-blame-read-only-mode-map (kbd "RET") 'magit-show-commit))))
+      (evil-define-key 'normal magit-blame-read-only-mode-map (kbd "RET") 'magit-show-commit)
+      ;; Make sure that M-m still switch windows in all magit buffers
+      (evil-define-key 'normal magit-section-mode-map (kbd "M-1") 'winum-select-window-1)
+      (evil-define-key 'normal magit-section-mode-map (kbd "M-2") 'winum-select-window-2)
+      (evil-define-key 'normal magit-section-mode-map (kbd "M-3") 'winum-select-window-3)
+      (evil-define-key 'normal magit-section-mode-map (kbd "M-4") 'winum-select-window-4)
+      (evil-define-key 'normal magit-section-mode-map (kbd "M-5") 'winum-select-window-5)
+      (evil-define-key 'normal magit-section-mode-map (kbd "M-6") 'winum-select-window-6)
+      (evil-define-key 'normal magit-section-mode-map (kbd "M-7") 'winum-select-window-7)
+      (evil-define-key 'normal magit-section-mode-map (kbd "M-8") 'winum-select-window-8)
+      (evil-define-key 'normal magit-section-mode-map (kbd "M-9") 'winum-select-window-9))))
 
 (defun git/init-magit-gitflow ()
   (use-package magit-gitflow
@@ -239,6 +250,10 @@ Press [_b_] again to blame further in the history, [_q_] to go up or quit."
     (progn
       (spacemacs|diminish magit-gitflow-mode "Flow")
       (define-key magit-mode-map "%" 'magit-gitflow-popup))))
+
+(defun git/init-magit-section ()
+  (use-package magit-section
+    :defer t))
 
 (defun git/init-magit-svn ()
   (use-package magit-svn

@@ -30,23 +30,19 @@
     :defer t
     :commands gnus
     :init
-    (spacemacs/set-leader-keys "ag" 'gnus)
-    :config
     (progn
-      ;; No primary server
-      (setq gnus-select-method '(nnnil ""))
-
-      ;; Use topics per default
-      (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
-
-      (setq gnus-visible-headers
-            "^From:\\|^Reply-To\\|^Organization:\\|^To:\\|^Cc:\\|^Newsgroups:\\|^Subject:\\|^Date:\\|^Gnus")
-
-      ;; Show the article headers in this order.
-      (setq gnus-sorted-header-list
-            '("^From:" "^Reply-To" "^Organization:" "^To:" "^Cc:" "^Newsgroups:"
-              "^Subject:" "^Date:" "^Gnus"))
-
+      (spacemacs/declare-prefix "ag" "gnus" "Gnus newsreader")
+      (spacemacs/set-leader-keys
+        "agg" 'gnus
+        "ags" 'gnus-slave
+        "agu" 'gnus-unplugged
+        "ago" 'gnus-slave-unplugged)
+      (spacemacs/declare-prefix-for-mode 'message-mode "mi" "insert")
+      (spacemacs/set-leader-keys-for-major-mode 'message-mode
+        ;; RFC 1855
+        "miF" 'flame-on)
+      ;; NOTE: If any of the following variables are modified,
+      ;; also update their values in: `gnus/README.org'
       (setq-default
        gnus-summary-line-format "%U%R%z %(%&user-date;  %-15,15f  %B (%c) %s%)\n"
        gnus-user-date-format-alist '((t . "%Y-%m-%d %H:%M"))
@@ -67,10 +63,33 @@
        gnus-mime-display-multipart-related-as-mixed t ; Show more MIME-stuff:
        gnus-auto-select-first nil ; Don't get the first article automatically:
        smiley-style 'medium
-       gnus-keep-backlog '0)
+       gnus-keep-backlog '0))
+    :config
+    (progn
+      ;; No primary server
+      (setq gnus-select-method '(nnnil ""))
+
+      ;; Use topics per default
+      (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
+
+      (setq gnus-visible-headers
+            "^From:\\|^Reply-To\\|^Organization:\\|^To:\\|^Cc:\\|^Newsgroups:\\|^Subject:\\|^Date:\\|^Gnus")
+
+      ;; Show the article headers in this order.
+      (setq gnus-sorted-header-list
+            '("^From:" "^Reply-To" "^Organization:" "^To:" "^Cc:" "^Newsgroups:"
+              "^Subject:" "^Date:" "^Gnus"))
 
       (require 'browse-url)
       (require 'nnrss)
+      (defun spacemacs/gnus-flame-on ()
+        "Most important email function, for RFC1855 compliance."
+        ;; https://tools.ietf.org/html/rfc1855
+        (interactive)
+        (insert "FLAME ON:\n")
+        (insert "FLAME OFF\n")
+        (forward-line -2)
+        (end-of-line))
       (defun spacemacs/browse-nnrss-url (arg)
         "Open RSS Article directy in the browser"
         (interactive "p")

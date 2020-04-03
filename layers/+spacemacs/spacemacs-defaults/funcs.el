@@ -512,19 +512,30 @@ FILENAME is deleted using `spacemacs/delete-file' function.."
        (with-parsed-tramp-file-name fname parsed
          (when (equal parsed-user "root")
            (error "Already root!"))
-         (let* ((new-hop (tramp-make-tramp-file-name parsed-method
-                                                     parsed-user
-                                                     parsed-host
-                                                     nil
-                                                     parsed-hop
-                                                     ))
+         (let* ((new-hop (tramp-make-tramp-file-name
+                          ;; Try to retrieve a tramp method suitable for
+                          ;; multi-hopping
+                          (cond ((tramp-get-method-parameter
+                                  parsed 'tramp-login-program))
+                                ((tramp-get-method-parameter
+                                  parsed 'tramp-copy-program))
+                                (t parsed-method))
+                          parsed-user
+                          parsed-domain
+                          parsed-host
+                          parsed-port
+                          nil
+                          parsed-hop))
                 (new-hop (substring new-hop 1 -1))
                 (new-hop (concat new-hop "|"))
-                (new-fname (tramp-make-tramp-file-name "sudo"
-                                                       "root"
-                                                       parsed-host
-                                                       parsed-localname
-                                                       new-hop)))
+                (new-fname (tramp-make-tramp-file-name
+                            "sudo"
+                            parsed-user
+                            parsed-domain
+                            parsed-host
+                            parsed-port
+                            parsed-localname
+                            new-hop)))
            new-fname))))))
 
 ;; check when opening large files - literal file open
@@ -563,11 +574,14 @@ If the universal prefix argument is used then kill also the window."
 ;; found at http://emacswiki.org/emacs/KillingBuffers
 (defun spacemacs/kill-other-buffers (&optional arg)
   "Kill all other buffers.
-If the universal prefix argument is used then will the windows too."
+If the universal prefix argument is used then kill the windows too."
   (interactive "P")
   (when (yes-or-no-p (format "Killing all buffers except \"%s\"? "
                              (buffer-name)))
-    (mapc 'kill-buffer (delq (current-buffer) (buffer-list)))
+    (let* ((buffers-to-kill (if (bound-and-true-p persp-mode)
+                                (persp-buffer-list)
+                              (buffer-list))))
+      (mapc 'kill-buffer (delq (current-buffer) buffers-to-kill)))
     (when (equal '(4) arg) (delete-other-windows))
     (message "Buffers deleted!")))
 
@@ -729,14 +743,19 @@ variable."
                (concat dotspacemacs-template-directory ".spacemacs.template")))
 
 (defun spacemacs/new-empty-buffer (&optional split)
-  "Create a new buffer called untitled(<n>).
-A SPLIT argument with the value: `left', `below', `above' or `right',
-opens the new buffer in a split window.
+  "Create a new buffer called: untitled<n>
+
+The SPLIT argument decides where the buffer opens:
+Value                                Buffer
+`nil'                                current window
+`left', `below', `above' or `right'  split window
+`frame'                              new frame
+
 If the variable `dotspacemacs-new-empty-buffer-major-mode' has been set,
 then apply that major mode to the new buffer."
   (interactive)
   (let ((newbuf (generate-new-buffer "untitled")))
-    (case split
+    (cl-case split
       ('left  (split-window-horizontally))
       ('below (spacemacs/split-window-vertically-and-switch))
       ('above (split-window-vertically))
@@ -1261,6 +1280,16 @@ With negative N, comment out original line and use the absolute value."
         (forward-line 1)
         (forward-char pos)))))
 
+;; credits to Steve Purcell
+;; https://github.com/purcell/emacs.d/blob/master/lisp/init-editing-utils.el
+;; https://emacsredux.com/blog/2013/04/08/kill-line-backward/
+(defun spacemacs/kill-back-to-indentation ()
+  "Kill from point back to the first non-whitespace character on the line."
+  (interactive)
+  (let ((prev-pos (point)))
+    (back-to-indentation)
+    (kill-region (point) prev-pos)))
+
 (defun spacemacs/uniquify-lines ()
   "Remove duplicate adjacent lines in a region or the current buffer"
   (interactive)
@@ -1618,3 +1647,49 @@ Decision is based on `dotspacemacs-line-numbers'."
           enabled-for-parent            ; mode is one of default allowed modes
           disabled-for-modes
           (not disabled-for-parent)))))
+
+
+;; randomize region
+
+(defun spacemacs/randomize-words (beg end)
+    "Randomize the order of words in region."
+    (interactive "*r")
+    (let ((all (mapcar
+                (lambda (w) (if (string-match "\\w" w)
+                                ;; Randomize words,
+                                (cons (random) w)
+                              ;; keep everything else in order.
+                              (cons -1 w)))
+                (split-string
+                 (delete-and-extract-region beg end) "\\b")))
+          words sorted)
+      (mapc (lambda (x)
+              ;; Words are numbers >= 0.
+              (unless (> 0 (car x))
+                (setq words (cons x words))))
+            all)
+      ;; Random sort!
+      (setq sorted (sort words
+                         (lambda (a b) (< (car a) (car b)))))
+      (mapc
+       'insert
+       ;; Insert using original list, `all',
+       ;; but pull *words* from randomly-sorted list, `sorted'.
+       (mapcar (lambda (x)
+                 (if (> 0 (car x))
+                     (cdr x)
+                   (prog1 (cdar sorted)
+                     (setq sorted (cdr sorted)))))
+               all))))
+
+(defun spacemacs/randomize-lines (beg end)
+  "Randomize lines in region from BEG to END."
+  (interactive "*r")
+  (let ((lines (split-string
+                (delete-and-extract-region beg end) "\n")))
+    (when (string-equal "" (car (last lines 1)))
+      (setq lines (butlast lines 1)))
+    (apply 'insert
+           (mapcar 'cdr
+                   (sort (mapcar (lambda (x) (cons (random) (concat x "\n"))) lines)
+                         (lambda (a b) (< (car a) (car b))))))))

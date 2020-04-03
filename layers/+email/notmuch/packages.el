@@ -16,8 +16,8 @@
         notmuch
         org
         persp-mode
-        window-purpose
-        ))
+        window-purpose))
+
 
 (defun notmuch/init-counsel-notmuch ()
   (use-package counsel-notmuch
@@ -80,26 +80,45 @@
         "Po" 'spacemacs/notmuch-show-open-github-patch
         "Pa" 'spacemacs/notmuch-git-apply-patch
         "PA" 'spacemacs/notmuch-git-apply-patch-part)
-      ;; evilified maps
-      (evilified-state-evilify-map notmuch-hello-mode-map
-        :mode notmuch-hello-mode)
+      ;; Evilify notmuch modes
+      ;; Use normal mode map to allow proper editing capabilities
+      ;; for the embedded search field in `notmuch-hello-mode`
+      (evil-set-initial-state 'notmuch-hello-mode 'normal)
+      (evil-define-key 'normal notmuch-hello-mode-map
+        "C-tab" #'widget-backward
+        "S-tab" #'widget-backward
+        "=" #'notmuch-refresh-this-buffer
+        "?" #'notmuch-help
+        "G" #'notmuch-poll-and-refresh-this-buffer
+        "g" #'notmuch-refresh-this-buffer
+        "J" #'notmuch-jump-search
+        "m" #'notmuch-mua-new-mail
+        "q" #'notmuch-bury-or-kill-this-buffer
+        "s" #'notmuch-search
+        "v" #'notmuch-hello-versions
+        "z" #'notmuch-tree
+        "M-=" #'notmuch-refresh-all-buffers)
+      ;; Make notmuch message mode closable via q
+      (evil-define-key 'normal notmuch-message-mode-map
+        "q" #'message-kill-buffer)
       (evilified-state-evilify-map notmuch-show-mode-map
         :mode notmuch-show-mode
         :bindings
-        ;; In notmuch-show-mode n would be bound to `notmuch-show-next-message`
-        ;; but the evilified state moves the `n' bound function to C-n while
-        ;; it's counterpart `notmuch-show-previous-message` remains bound to
-        ;; `p'. Adding a binding for the previous function to `C-p' becomes
-        ;; handy while navigation messages back and forth.
-        (kbd "C-p")   'notmuch-show-previous-message
+        (kbd "N")   'notmuch-show-next-message
+        (kbd "P")   'notmuch-show-previous-message
+        (kbd "p")   'notmuch-show-previous-open-message
         (kbd "n")   'notmuch-show-next-open-message
         (kbd "o")   'notmuch-show-open-or-close-all
         (kbd "O")   'spacemacs/notmuch-show-close-all)
       (evilified-state-evilify-map notmuch-tree-mode-map
         :mode notmuch-tree-mode
         :bindings
+        (kbd "N") 'notmuch-tree-next-message
+        (kbd "P") 'notmuch-tree-prev-message
         (kbd "d") 'spacemacs/notmuch-message-delete-down
         (kbd "D") 'spacemacs/notmuch-message-delete-up
+        (kbd "n") 'notmuch-tree-next-matching-message
+        (kbd "p") 'notmuch-tree-prev-matching-message
         (kbd "M") 'compose-mail-other-frame)
       (evilified-state-evilify-map notmuch-search-mode-map
         :mode notmuch-search-mode
@@ -118,7 +137,7 @@
 
 (defun notmuch/pre-init-org ()
   (spacemacs|use-package-add-hook org
-    :post-config (require 'org-notmuch)))
+    :post-config (require 'ol-notmuch)))
 
 (defun notmuch/pre-init-persp-mode ()
   (spacemacs|use-package-add-hook persp-mode
