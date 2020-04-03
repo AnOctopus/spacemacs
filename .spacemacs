@@ -37,6 +37,10 @@ values."
              colors
              command-log
              dap
+             (dhall :variables
+                 dhall-format-at-save nil
+                 dhall-use-header-line nil
+                 )
              docker
              emacs-lisp
              (evil-snipe :variables
@@ -74,6 +78,7 @@ values."
                  mu4e-confirm-quit nil
                  mu4e-index-update-error-warning nil
                  )
+             nginx
              no-dots
              org
              (python :variables
@@ -104,10 +109,11 @@ values."
         ;; configuration in `dotspacemacs/user-config'.
         dotspacemacs-additional-packages
         '(
+             cov
+             context-coloring
              darktooth-theme
              poetry
              rainbow-blocks
-             cov
              )
         ;; A list of packages that cannot be updated.
         dotspacemacs-frozen-packages '()
@@ -526,6 +532,7 @@ you should place your code here."
         tab-always-indent t
         vc-follow-symlinks t
         yaml-indent-offset 2
+        spacemacs-show-trailing-whitespace nil
         )
     (setq
         custom-file "~/.emacs.d/custom.el"
@@ -552,6 +559,9 @@ you should place your code here."
     (add-hook 'flycheck-error-list-mode-hook
         (lambda ()
             (visual-line-mode 1)))
+    (add-to-list 'auto-mode-alist
+        '("Dockerfile-\\.*" . dockerfile-mode))
+
     (setq
         user-full-name "Amanda Walker")
 
@@ -647,4 +657,14 @@ you should place your code here."
 
     (add-hook 'minibuffer-setup-hook #'doom-defer-garbage-collection-h)
     (add-hook 'minibuffer-exit-hook #'doom-restore-garbage-collection-h)
+
+    (with-eval-after-load 'lsp-mode
+        (progn
+            (add-to-list 'lsp-language-id-configuration '(dhall-mode . "dhall"))
+            (lsp-register-client
+                (make-lsp-client :new-connection (lsp-stdio-connection "dhall-lsp-server")
+                    :major-modes '(dhall-mode)
+                    :server-id 'dhall
+                    ))
+            ))
     )
