@@ -53,10 +53,11 @@ values."
                  )
              graphviz
              (haskell :variables
-                 haskell-completion-backend 'ghci)
+                 haskell-completion-backend 'lsp)
              html
              (javascript :variables
                  javascript-backend 'lsp)
+             latex
              (lsp :variables
                  lsp-print-io t
                  lsp-print-performance t
