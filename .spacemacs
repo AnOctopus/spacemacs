@@ -31,38 +31,25 @@ values."
         ;; List of configuration layers to load.
         dotspacemacs-configuration-layers
         '(
-             ansible
              auto-completion
-             chrome
              colors
              command-log
              dap
-             (dhall :variables
-                 dhall-format-at-save nil
-                 dhall-use-header-line nil
-                 )
              docker
              emacs-lisp
              (evil-snipe :variables
                  evil-snipe-enable-alternate-f-and-t-behaviors t)
              fasd
              git
-             (go :variables
-                 go-backend 'lsp
-                 lsp-clients-go-func-snippet-enabled nil
-                 )
              graphviz
              (haskell :variables
                  haskell-completion-backend 'lsp)
              html
-             (javascript :variables
-                 javascript-backend 'lsp)
              latex
              (lsp :variables
                  lsp-print-io t
                  lsp-print-performance t
                  company-lsp-cache-candidates 'auto
-                 ;; lsp-enable-file-watchers nil
                  lsp-pyls-server-command '("pyls" "-vv" "--log-file" "pyls.log")
                  )
              markdown
@@ -79,8 +66,7 @@ values."
                  mu4e-confirm-quit nil
                  mu4e-index-update-error-warning nil
                  )
-             nginx
-             no-dots
+             ;; no-dots
              org
              (python :variables
                  python-backend 'lsp
@@ -91,16 +77,12 @@ values."
                  ;; lsp-pyls-plugins-pylint-enabled t
                  lsp-pyls-plugins-mccabe-enabled nil
                  )
-             react
-             rust
              shell
              shell-scripts
              ;; flyspell is a surprisingly bad cpu/memory hog
              ;; spell-checking
              syntax-checking
              terraform
-             (typescript :variables
-                 typescript-backend 'lsp)
              (version-control :variables version-control-diff-tool 'git-gutter)
              yaml
              )
@@ -110,10 +92,8 @@ values."
         ;; configuration in `dotspacemacs/user-config'.
         dotspacemacs-additional-packages
         '(
-             cov
              context-coloring
              darktooth-theme
-             poetry
              rainbow-blocks
              )
         ;; A list of packages that cannot be updated.
@@ -529,7 +509,7 @@ you should place your code here."
         nxml-child-indent 4
         nxml-slash-auto-complete-flag t
         tab-width 4
-        column-enforce-column 88
+        column-enforce-column 100
         tab-always-indent t
         vc-follow-symlinks t
         yaml-indent-offset 2
@@ -538,6 +518,7 @@ you should place your code here."
     (setq
         custom-file "~/.emacs.d/custom.el"
         spacemacs-useful-buffers-regexp '("\\*\\(scratch\\|spacemacs\\)\\*")
+        history-delete-duplicates t
         )
     (load custom-file)
     (define-key evil-normal-state-map (kbd "SPC #") #'server-edit)
